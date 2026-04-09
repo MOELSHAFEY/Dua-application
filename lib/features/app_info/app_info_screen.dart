@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dua/core/theme/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppInfoScreen extends StatelessWidget {
   const AppInfoScreen({super.key});
@@ -103,6 +104,8 @@ class AppInfoScreen extends StatelessWidget {
               icon: Icons.code_rounded,
             ),
 
+            _buildContactSection(),
+
             const SizedBox(height: 40),
           
           ],
@@ -158,6 +161,93 @@ class AppInfoScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildContactSection() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppColors.primary.withValues(alpha: 0.05),
+            AppColors.primary.withValues(alpha: 0.02),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.1),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.contact_support_rounded, color: AppColors.primary, size: 24),
+              const SizedBox(width: 12),
+              levelText('تواصل مع المطور', size: 18, weight: FontWeight.bold),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'للاقتراحات أو الإبلاغ عن أي مشكلة تقنية، يمكنك التواصل مباشرة مع المطور عبر تليجرام',
+            style: GoogleFonts.cairo(
+              fontSize: 13,
+              color: AppColors.textSecondary,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => _launchTelegram('MO_SH_FY'),
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0088cc), // Telegram official color
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF0088cc).withValues(alpha: 0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.send_rounded, color: Colors.white, size: 20),
+                    const SizedBox(width: 12),
+                    Text(
+                      'مراسلة عبر تليجرام',
+                      style: GoogleFonts.cairo(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _launchTelegram(String username) async {
+    final url = 'https://t.me/$username';
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
   Widget levelText(String text, {double size = 16, FontWeight weight = FontWeight.normal}) {
     return Text(
       text,
@@ -168,5 +258,4 @@ class AppInfoScreen extends StatelessWidget {
       ),
     );
   }
-
 }
