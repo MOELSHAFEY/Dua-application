@@ -12,6 +12,8 @@ import 'package:dua/features/favorites/presentation/pages/favorites_screen.dart'
 import 'package:dua/features/drug_search/presentation/cubit/search_cubit.dart';
 import 'package:dua/features/drug_search/presentation/cubit/search_state.dart';
 import 'package:dua/features/drug_details/presentation/pages/drug_details_screen.dart';
+import 'package:dua/core/services/voice_search_service.dart';
+import 'package:dua/core/di/injection_container.dart' as di;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,6 +24,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
+  bool _isListening = false;
+  final VoiceSearchService _voiceSearchService = di.sl<VoiceSearchService>();
 
   @override
   void dispose() {
@@ -261,9 +265,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-            suffixIcon: Icon(
-              Icons.mic_none_rounded,
-              color: AppColors.primary.withValues(alpha: 0.5),
+            suffixIcon: IconButton(
+              icon: Icon(
+                _isListening ? Icons.mic_rounded : Icons.mic_none_rounded,
+                color: _isListening ? AppColors.error : AppColors.primary.withValues(alpha: 0.5),
+              ),
+              onPressed: _toggleListening,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
@@ -385,5 +392,27 @@ class _HomeScreenState extends State<HomeScreen> {
         behavior: SnackBarBehavior.floating,
       ),
     );
+  }
+
+  void _toggleListening() async {
+    if (_isListening) {
+      await _voiceSearchService.stopListening();
+    } else {
+      await _voiceSearchService.startListening(
+        onResult: (text) {
+          setState(() {
+            _searchController.text = text;
+          });
+          if (text.trim().isNotEmpty) {
+            context.read<SearchCubit>().search(text);
+          }
+        },
+        onListeningStateChanged: (isListening) {
+          setState(() {
+            _isListening = isListening;
+          });
+        },
+      );
+    }
   }
 }

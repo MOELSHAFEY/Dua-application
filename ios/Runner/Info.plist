@@ -45,5 +45,9 @@
     <true/>
     <key>UIApplicationSupportsIndirectInputEvents</key>
     <true/>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>نحتاج إلى الوصول إلى الميكروفون للبحث عن الأدوية عن طريق الصوت.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>نحتاج إلى إذن التعرف على الكلام لتحويل صوتك إلى نص للبحث.</string>
   </dict>
 </plist>

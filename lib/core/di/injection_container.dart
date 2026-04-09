@@ -22,6 +22,8 @@ import 'package:dua/features/favorites/domain/usecases/get_favorites_usecase.dar
 import 'package:dua/features/favorites/domain/usecases/toggle_favorite_usecase.dart';
 import 'package:dua/features/favorites/presentation/cubit/favorites_cubit.dart';
 import 'package:dua/core/network/api_client.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:dua/core/services/voice_search_service.dart';
 
 final sl = GetIt.instance;
 
@@ -74,7 +76,9 @@ Future<void> init() async {
 
   // Core
   sl.registerLazySingleton(() => ApiClient(client: sl()));
+  sl.registerLazySingleton(() => VoiceSearchService(sl()));
 
   // External
   sl.registerLazySingleton(() => http.Client());
+  sl.registerLazySingleton(() => SpeechToText());
 }
