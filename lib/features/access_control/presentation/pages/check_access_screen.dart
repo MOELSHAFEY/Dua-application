@@ -178,40 +178,43 @@ class _AppDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      backgroundColor: AppColors.surface,
-      contentPadding: const EdgeInsets.all(24),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Center(child: Icon(icon, size: 48, color: AppColors.primary)),
-          const SizedBox(height: 16),
-          Text(
-            title,
-            textAlign: TextAlign.right,
-            style: GoogleFonts.cairo(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: AppColors.surface,
+        contentPadding: const EdgeInsets.all(24),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(child: Icon(icon, size: 48, color: AppColors.primary)),
+            const SizedBox(height: 16),
+            Text(
+              title,
+              textAlign: TextAlign.right,
+              style: GoogleFonts.cairo(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            message,
-            textAlign: TextAlign.right,
-            style: GoogleFonts.cairo(fontSize: 14, color: AppColors.textSecondary),
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: onPressed,
-              child: Text(buttonText),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              textAlign: TextAlign.right,
+              style: GoogleFonts.cairo(fontSize: 14, color: AppColors.textSecondary),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: onPressed,
+                child: Text(buttonText),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

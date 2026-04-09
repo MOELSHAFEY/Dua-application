@@ -1,3 +1,4 @@
+import 'package:dua/features/app_info/app_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,48 +41,55 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildDrawer() {
     return Drawer(
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
         children: [
-          DrawerHeader(
+          Container(
+            height: 220,
+            width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [AppColors.primary, AppColors.primaryDark],
+                colors: [AppColors.primaryDark, AppColors.primary],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
+              borderRadius: BorderRadius.only(bottomRight: Radius.circular(40)),
             ),
-            child: Center(
+            child: SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.medication_rounded,
-                    color: Colors.white,
-                    size: 50,
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.medication_rounded,
+                      color: Colors.white,
+                      size: 50,
+                    ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 16),
                   Text(
-                    'Dua',
+                    'Dua Assistant',
                     style: GoogleFonts.cairo(
                       color: Colors.white,
                       fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.5,
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          ListTile(
-            leading: const Icon(
-              Icons.favorite_rounded,
-              color: AppColors.error,
-            ),
-            title: Text(
-              'المفضلة',
-              style: GoogleFonts.cairo(fontWeight: FontWeight.w600),
-            ),
+          const SizedBox(height: 20),
+          _buildDrawerItem(
+            icon: Icons.favorite_rounded,
+            title: 'المفضلة',
+            color: AppColors.error,
             onTap: () {
               Navigator.pop(context);
               Navigator.push(
@@ -92,19 +100,79 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
+          _buildDrawerItem(
+            icon: Icons.info_outline_rounded,
+            title: 'عن التطبيق',
+            color: AppColors.primary,
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AppInfoScreen()),
+              );
+            },
+          ),
           const Spacer(),
           Padding(
-            padding: const EdgeInsets.all(20),
-            child: Text(
-              'Moelshafey ©2026',
-              style: GoogleFonts.cairo(
-                fontSize: 12,
-                color: AppColors.textLight,
-                fontWeight: FontWeight.bold,
-              ),
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              children: [
+                Text(
+                  'Dua v1.0.0',
+                  style: GoogleFonts.cairo(
+                    fontSize: 14,
+                    color: AppColors.textLight,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Moelshafey © 2026',
+                  style: GoogleFonts.cairo(
+                    fontSize: 12,
+                    color: AppColors.textLight.withValues(alpha: 0.6),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDrawerItem({
+    required IconData icon,
+    required String title,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: ListTile(
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: color, size: 22),
+        ),
+        title: Text(
+          title,
+          style: GoogleFonts.cairo(
+            fontWeight: FontWeight.w700,
+            color: AppColors.textPrimary,
+            fontSize: 16,
+          ),
+        ),
+        trailing: const Icon(
+          Icons.arrow_forward_ios_rounded,
+          size: 14,
+          color: AppColors.textLight,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        onTap: onTap,
       ),
     );
   }
@@ -126,11 +194,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                   
                     _buildSearchField(),
                     const SizedBox(height: 32),
                     _buildResults(state),
-                    
                   ],
                 ),
               ),
@@ -141,19 +207,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
   Widget _buildSearchField() {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 700),
+    return FadeInDown(
+      duration: const Duration(milliseconds: 800),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.12),
-              blurRadius: 25,
-              offset: const Offset(0, 8),
+              color: AppColors.primary.withValues(alpha: 0.1),
+              blurRadius: 30,
+              offset: const Offset(0, 12),
             ),
           ],
         ),
@@ -166,42 +231,49 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.right,
+          style: GoogleFonts.cairo(
+            fontWeight: FontWeight.w600,
+            fontSize: 17,
+            color: AppColors.textPrimary,
+          ),
           decoration: InputDecoration(
             hintText: 'ابحث عن اسم الدواء...',
             hintStyle: GoogleFonts.cairo(
-              color: AppColors.textLight,
+              color: AppColors.textLight.withValues(alpha: 0.6),
               fontSize: 16,
             ),
-            prefixIcon: IconButton(
-              icon: const Icon(
-                Icons.search_rounded,
+            prefixIcon: Container(
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
                 color: AppColors.primary,
-                size: 28,
+                borderRadius: BorderRadius.circular(16),
               ),
-              onPressed: () {
-                if (_searchController.text.trim().isNotEmpty) {
-                  context.read<SearchCubit>().search(_searchController.text);
-                }
-              },
+              child: IconButton(
+                icon: const Icon(
+                  Icons.search_rounded,
+                  color: Colors.white,
+                  size: 24,
+                ),
+                onPressed: () {
+                  if (_searchController.text.trim().isNotEmpty) {
+                    context.read<SearchCubit>().search(_searchController.text);
+                  }
+                },
+              ),
             ),
-            suffixIcon: IconButton(
-              icon: const Icon(
-                Icons.mic_none_rounded,
-                color: AppColors.primary,
-              ),
-              onPressed: () {
-                // Future implementation: Voice Search
-              },
+            suffixIcon: Icon(
+              Icons.mic_none_rounded,
+              color: AppColors.primary.withValues(alpha: 0.5),
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(24),
               borderSide: BorderSide.none,
             ),
             filled: true,
             fillColor: AppColors.surface,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 24,
-              vertical: 20,
+              vertical: 22,
             ),
           ),
         ),
@@ -300,7 +372,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
-
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
