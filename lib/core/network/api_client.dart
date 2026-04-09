@@ -12,6 +12,9 @@ class ApiClient {
     final uri = Uri.parse('$baseUrl$path').replace(queryParameters: queryParameters);
     try {
       final response = await client.get(uri).timeout(const Duration(seconds: 15));
+      print(response.body);
+      print(uri);
+
       return _handleResponse(response);
     } catch (e) {
       if (e is ServerException) rethrow;
