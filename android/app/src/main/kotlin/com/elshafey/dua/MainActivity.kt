@@ -1,4 +1,4 @@
-package com.example.dua
+package com.elshafey.dua
 
 import io.flutter.embedding.android.FlutterActivity
 
