@@ -5,7 +5,7 @@ import 'access_state.dart';
 
 class AccessCubit extends Cubit<AccessState> {
   final CheckVersionUseCase checkVersionUseCase;
-  static const String currentVersion = "4.0.0";
+  static const String currentVersion = "5.0.0";
 
   AccessCubit({required this.checkVersionUseCase}) : super(AccessInitial());
 

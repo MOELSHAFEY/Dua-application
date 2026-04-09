@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 Text(
-                  'Dua v1.0.0',
+                  'Dua v5.0.0',
                   style: GoogleFonts.cairo(
                     fontSize: 14,
                     color: AppColors.textLight,

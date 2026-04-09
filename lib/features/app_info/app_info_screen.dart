@@ -72,7 +72,7 @@ class AppInfoScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                'الاصدار 1.0.0',
+                'الاصدار 5.0.0',
                 style: GoogleFonts.cairo(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
