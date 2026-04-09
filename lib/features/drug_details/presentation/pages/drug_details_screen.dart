@@ -14,7 +14,6 @@ import 'package:dua/features/favorites/presentation/cubit/favorites_cubit.dart';
 import 'package:dua/features/favorites/presentation/cubit/favorites_state.dart';
 import 'package:dua/features/drug_details/presentation/cubit/drug_details_cubit.dart';
 import 'package:dua/features/drug_details/presentation/cubit/drug_details_state.dart';
-import 'package:dua/features/drug_details/presentation/widgets/shareable_drug_card.dart';
 import 'package:dua/features/drug_details/presentation/widgets/drug_product_image.dart';
 import 'package:dua/features/drug_details/presentation/widgets/drug_ecommerce_header.dart';
 import 'package:dua/features/drug_details/presentation/widgets/drug_info_card.dart';
@@ -71,22 +70,58 @@ class _DrugDetailsScreenState extends State<DrugDetailsScreen> {
   }
 
   Future<void> _shareDrug(String rawInfo) async {
-    final drugInfo = rawInfo
-        .replaceAll(RegExp(r'<style[^>]*>.*?</style>', multiLine: true, dotAll: true, caseSensitive: false), '')
-        .replaceAll(RegExp(r'<script[^>]*>.*?</script>', multiLine: true, dotAll: true, caseSensitive: false), '')
-        .replaceAll(RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false), '')
-        .replaceAll('&nbsp;', ' ')
-        .replaceAll('&amp;', '&')
-        .replaceAll('&quot;', '"')
-        .replaceAll('&lt;', '<')
-        .replaceAll('&gt;', '>')
-        .trim();
+    final drugInfo =
+        rawInfo
+            .replaceAll(
+              RegExp(
+                r'<style[^>]*>.*?</style>',
+                multiLine: true,
+                dotAll: true,
+                caseSensitive: false,
+              ),
+              '',
+            )
+            .replaceAll(
+              RegExp(
+                r'<script[^>]*>.*?</script>',
+                multiLine: true,
+                dotAll: true,
+                caseSensitive: false,
+              ),
+              '',
+            )
+            .replaceAll(
+              RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false),
+              '',
+            )
+            .replaceAll('&nbsp;', ' ')
+            .replaceAll('&amp;', '&')
+            .replaceAll('&quot;', '"')
+            .replaceAll('&lt;', '<')
+            .replaceAll('&gt;', '>')
+            .trim();
 
     try {
       _showSnackBar("جاري تجهيز الصورة للمشاركة...");
 
       final image = await screenshotController.captureFromLongWidget(
-        ShareableDrugCard(drug: widget.drug, drugInfo: drugInfo),
+        Container(
+          color: Colors.white,
+          child:
+              widget.drug.image.contains("http")
+                  ? Image.network(widget.drug.image, fit: BoxFit.contain)
+                  : Container(
+                    height: 300,
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    child: Center(
+                      child: Icon(
+                        Icons.medication_rounded,
+                        size: 100,
+                        color: AppColors.primary.withValues(alpha: 0.3),
+                      ),
+                    ),
+                  ),
+        ),
         delay: const Duration(milliseconds: 300),
         context: context,
         constraints: BoxConstraints(
@@ -95,10 +130,12 @@ class _DrugDetailsScreenState extends State<DrugDetailsScreen> {
       );
 
       final directory = await getTemporaryDirectory();
-      final imagePath = await File('${directory.path}/drug_${widget.drug.id}.png').create();
+      final imagePath =
+          await File('${directory.path}/drug_${widget.drug.id}.png').create();
       await imagePath.writeAsBytes(image);
 
-      final shareText = 'اسم الدواء: ${widget.drug.name}\n\nالسعر: ${widget.drug.price} جنيه\n\nللتمتع بمزيد من التفاصيل، يرجى تحميل التطبيق';
+      final shareText =
+          'اسم الدواء: ${widget.drug.name}\n\nالسعر: ${widget.drug.price} جنيه\n\nالتفاصيل :${drugInfo}\n\n لتحميل التطبيق من هنا : https://t.me/elshafey_Team';
 
       await Share.shareXFiles(
         [XFile(imagePath.path)],
@@ -114,35 +151,42 @@ class _DrugDetailsScreenState extends State<DrugDetailsScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (context) => Scaffold(
-          backgroundColor: Colors.black,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            iconTheme: const IconThemeData(color: Colors.white),
-          ),
-          body: Center(
-            child: InteractiveViewer(
-              minScale: 0.5,
-              maxScale: 4.0,
-              child: Hero(
-                tag: 'drug_img_${widget.drug.id}',
-                child: widget.drug.image.contains("http")
-                    ? Image.network(widget.drug.image, fit: BoxFit.contain)
-                    : Container(
-                        color: AppColors.primary.withValues(alpha: 0.1),
-                        child: Center(
-                          child: Icon(
-                            Icons.medication_rounded,
-                            size: 100,
-                            color: AppColors.primary.withValues(alpha: 0.3),
-                          ),
-                        ),
-                      ),
+        builder:
+            (context) => Scaffold(
+              backgroundColor: Colors.black,
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                iconTheme: const IconThemeData(color: Colors.white),
+              ),
+              body: Center(
+                child: InteractiveViewer(
+                  minScale: 0.5,
+                  maxScale: 4.0,
+                  child: Hero(
+                    tag: 'drug_img_${widget.drug.id}',
+                    child:
+                        widget.drug.image.contains("http")
+                            ? Image.network(
+                              widget.drug.image,
+                              fit: BoxFit.contain,
+                            )
+                            : Container(
+                              color: AppColors.primary.withValues(alpha: 0.1),
+                              child: Center(
+                                child: Icon(
+                                  Icons.medication_rounded,
+                                  size: 100,
+                                  color: AppColors.primary.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                ),
+                              ),
+                            ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
       ),
     );
   }
@@ -155,7 +199,9 @@ class _DrugDetailsScreenState extends State<DrugDetailsScreen> {
         builder: (context, state) {
           return BlocBuilder<FavoritesCubit, FavoritesState>(
             builder: (fContext, fState) {
-              final isFav = context.read<FavoritesCubit>().isFavorite(widget.drug.id);
+              final isFav = context.read<FavoritesCubit>().isFavorite(
+                widget.drug.id,
+              );
 
               return Scaffold(
                 backgroundColor: AppColors.scaffoldBackground,
@@ -178,20 +224,31 @@ class _DrugDetailsScreenState extends State<DrugDetailsScreen> {
                             duration: const Duration(milliseconds: 600),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
-                                horizontal: isTablet ? constraints.maxWidth * 0.1 : 0,
+                                horizontal:
+                                    isTablet ? constraints.maxWidth * 0.1 : 0,
                               ),
                               child: Column(
                                 children: [
-                                  DrugEcommerceHeader(drug: widget.drug, isTablet: isTablet),
+                                  DrugEcommerceHeader(
+                                    drug: widget.drug,
+                                    isTablet: isTablet,
+                                  ),
                                   const SizedBox(height: 16),
-                                  DrugInfoCard(state: state, isTablet: isTablet),
+                                  DrugInfoCard(
+                                    state: state,
+                                    isTablet: isTablet,
+                                  ),
                                   const SizedBox(height: 24),
                                   DrugActionButtons(
                                     isFavorite: isFav,
                                     onFavoriteToggle: () {
-                                      context.read<FavoritesCubit>().toggleFavorite(widget.drug);
+                                      context
+                                          .read<FavoritesCubit>()
+                                          .toggleFavorite(widget.drug);
                                       _showSnackBar(
-                                        isFav ? "تمت الإزالة من المفضلة" : "تمت الإضافة إلى المفضلة",
+                                        isFav
+                                            ? "تمت الإزالة من المفضلة"
+                                            : "تمت الإضافة إلى المفضلة",
                                       );
                                     },
                                   ),
