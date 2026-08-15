@@ -8,7 +8,6 @@ import 'core/theme/themes.dart';
 import 'package:dua/features/drug_search/presentation/providers/search_provider.dart';
 import 'package:dua/features/drug_search/presentation/providers/search_history_provider.dart';
 import 'package:dua/features/favorites/presentation/providers/favorites_provider.dart';
-import 'package:dua/features/access_control/presentation/providers/access_provider.dart';
 import 'features/splash/presentation/screens/splash_screen.dart';
 
 void main() async {
@@ -26,7 +25,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => di.sl<AccessProvider>()),
         ChangeNotifierProvider(create: (_) => di.sl<FavoritesProvider>()..init()),
         ChangeNotifierProvider(create: (_) => di.sl<SearchProvider>()),
         ChangeNotifierProvider(create: (_) => di.sl<SearchHistoryProvider>()..initHive()),

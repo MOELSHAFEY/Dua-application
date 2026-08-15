@@ -30,7 +30,7 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   // Features - Drug Search
-  sl.registerFactory(() => SearchProvider(searchDrugsUseCase: sl()));
+  sl.registerLazySingleton(() => SearchProvider(searchDrugsUseCase: sl()));
   sl.registerLazySingleton(() => SearchHistoryProvider());
   sl.registerLazySingleton(() => SearchDrugsUseCase(sl()));
   sl.registerLazySingleton<DrugRepository>(
@@ -50,7 +50,7 @@ Future<void> init() async {
     () => DrugDetailsRemoteDataSourceImpl(apiClient: sl()),
   );
   // Features - Favorites
-  sl.registerFactory(
+  sl.registerLazySingleton(
     () => FavoritesProvider(
       getFavoritesUseCase: sl(),
       toggleFavoriteUseCase: sl(),

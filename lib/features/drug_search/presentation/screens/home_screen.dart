@@ -325,11 +325,88 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildInitialState() {
-    return EmptyStateWidget(
-      icon: Icons.search_rounded,
-      title: 'ابحث عن دواء',
-      subtitle:
-          'استخدم شريط البحث أعلاه للعثور على معلومات الأدوية والأسعار البديلة.',
+    return Consumer<SearchHistoryProvider>(
+      builder: (context, historyProvider, _) {
+        final history = historyProvider.history;
+        if (history.isEmpty) {
+          return EmptyStateWidget(
+            icon: Icons.search_rounded,
+            title: 'ابحث عن دواء',
+            subtitle:
+                'استخدم شريط البحث أعلاه للعثور على معلومات الأدوية والأسعار البديلة.',
+          );
+        }
+
+        return FadeInUp(
+          duration: const Duration(milliseconds: 500),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'عمليات البحث الأخيرة',
+                      style: GoogleFonts.cairo(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    TextButton.icon(
+                      onPressed: () => historyProvider.clearHistory(),
+                      icon: const Icon(Icons.delete_sweep_outlined, size: 18, color: AppColors.textLight),
+                      label: Text(
+                        'مسح الكل',
+                        style: GoogleFonts.cairo(
+                          fontSize: 13,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: history.map((item) {
+                    return ActionChip(
+                      backgroundColor: AppColors.primary.withValues(alpha: 0.08),
+                      avatar: const Icon(Icons.history, size: 16, color: AppColors.primary),
+                      label: Text(
+                        item,
+                        style: GoogleFonts.cairo(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      onPressed: () {
+                        _searchController.text = item;
+                        _onPerformSearch(item);
+                      },
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

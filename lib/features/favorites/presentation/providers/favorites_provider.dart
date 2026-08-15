@@ -61,13 +61,13 @@ class FavoritesProvider extends ChangeNotifier {
 
   Future<void> toggleFavorite(Drug drug) async {
     final result = await toggleFavoriteUseCase(drug);
-    result.fold(
-      (failure) {
+    await result.fold(
+      (failure) async {
         _status = FavoritesStatus.error;
         _errorMessage = failure.message;
         notifyListeners();
       },
-      (_) => loadFavorites(),
+      (_) async => await loadFavorites(),
     );
   }
 

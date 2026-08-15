@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../../core/widgets/custom_loader.dart';
+import '../../../../core/di/injection_container.dart' as di;
 import '../../../drug_search/presentation/screens/home_screen.dart';
 import '../providers/access_provider.dart';
 
@@ -19,17 +20,7 @@ class CheckAccessScreen extends StatefulWidget {
 class _CheckAccessScreenState extends State<CheckAccessScreen> {
   AccessStatus? _lastHandledStatus;
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        context.read<AccessProvider>().checkAccess();
-      }
-    });
-  }
-
-  void _handleStatusChange(AccessProvider provider) {
+  void _handleStatusChange(BuildContext context, AccessProvider provider) {
     if (_lastHandledStatus == provider.status) return;
     _lastHandledStatus = provider.status;
 
@@ -41,22 +32,24 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
           MaterialPageRoute(builder: (_) => const HomeScreen()),
         );
       } else if (provider.isUpdateRequired) {
-        _showUpdateDialog(provider.updateUrl);
+        _showUpdateDialog(context, provider.updateUrl);
       } else if (provider.isError) {
-        _showErrorDialog(provider.errorMessage);
+        _showErrorDialog(context, provider.errorMessage);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AccessProvider>(
-      builder: (context, provider, child) {
-        _handleStatusChange(provider);
+    return ChangeNotifierProvider(
+      create: (_) => di.sl<AccessProvider>()..checkAccess(),
+      child: Consumer<AccessProvider>(
+        builder: (context, provider, child) {
+          _handleStatusChange(context, provider);
 
-        return Scaffold(
-          body: Container(
-            width: double.infinity,
+          return Scaffold(
+            body: Container(
+              width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -135,12 +128,13 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
           ),
         );
       },
-    );
-  }
+    ),
+  );
+}
 
-  void _showUpdateDialog(String updateUrl) {
+  void _showUpdateDialog(BuildContext ctx, String updateUrl) {
     showDialog(
-      context: context,
+      context: ctx,
       barrierDismissible: false,
       builder: (_) => _AppDialog(
         icon: Icons.system_update_alt,
@@ -157,9 +151,9 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
     );
   }
 
-  void _showErrorDialog(String message) {
+  void _showErrorDialog(BuildContext ctx, String message) {
     showDialog(
-      context: context,
+      context: ctx,
       barrierDismissible: false,
       builder: (_) => _AppDialog(
         icon: Icons.wifi_off,
@@ -167,9 +161,9 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
         message: message,
         buttonText: "إعادة المحاولة",
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.pop(ctx);
           _lastHandledStatus = null;
-          context.read<AccessProvider>().checkAccess();
+          ctx.read<AccessProvider>().checkAccess();
         },
       ),
     );

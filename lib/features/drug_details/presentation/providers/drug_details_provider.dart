@@ -26,6 +26,7 @@ class DrugDetailsProvider extends ChangeNotifier {
   String get errorMessage => _errorMessage;
 
   Future<void> loadDrugInfo(String id) async {
+    if (_isDisposed) return;
     _status = DrugDetailsStatus.loading;
     _errorMessage = '';
     notifyListeners();
