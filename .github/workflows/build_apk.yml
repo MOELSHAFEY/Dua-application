@@ -70,8 +70,21 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      # 9. Create GitHub Release when a tag (e.g. v1.0.0) is pushed
-      - name: Create Release & Upload APK
+      # 9. Publish or update "Latest Release" on GitHub Releases for every push to main
+      - name: Publish Latest GitHub Release
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: "Latest Release (v6.0.0)"
+          body: "🚀 Latest automated APK build from `main` branch."
+          prerelease: false
+          files: build/app/outputs/flutter-apk/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 10. Create GitHub Release when a version tag (e.g. v6.0.0) is pushed
+      - name: Create Versioned Release & Upload APK
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
