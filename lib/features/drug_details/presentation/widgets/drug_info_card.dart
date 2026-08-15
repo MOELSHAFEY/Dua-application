@@ -16,6 +16,11 @@ class DrugInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? AppColors.cardBackgroundDark : AppColors.cardBackground;
+    final borderColor = isDark ? AppColors.borderDark : AppColors.border;
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     String infoText = '';
     if (provider.isLoaded) {
       infoText = provider.drugInfo
@@ -56,9 +61,9 @@ class DrugInfoCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: cardBg,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 1),
+        border: Border.all(color: borderColor, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -68,9 +73,9 @@ class DrugInfoCard extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
             child: Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.description_outlined,
-                  color: AppColors.primary,
+                  color: primaryColor,
                   size: 20,
                 ),
                 const SizedBox(width: 8),
@@ -79,7 +84,7 @@ class DrugInfoCard extends StatelessWidget {
                   style: GoogleFonts.cairo(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
               ],
@@ -98,7 +103,7 @@ class DrugInfoCard extends StatelessWidget {
                       style: GoogleFonts.cairo(
                         fontSize: 15,
                         height: 1.8,
-                        color: AppColors.textPrimary,
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontWeight: FontWeight.normal,
                       ),
                     ),

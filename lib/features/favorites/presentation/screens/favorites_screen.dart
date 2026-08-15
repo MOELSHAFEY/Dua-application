@@ -17,20 +17,24 @@ class FavoritesScreen extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: AppColors.scaffoldBackground,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           title: Text(
             'الأدوية المفضلة',
             style: GoogleFonts.cairo(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           centerTitle: true,
-          backgroundColor: AppColors.surface,
+          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
           elevation: 0,
           scrolledUnderElevation: 1,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_rounded, color: Theme.of(context).colorScheme.onSurface),
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
         body: Consumer<FavoritesProvider>(
           builder: (context, provider, child) {

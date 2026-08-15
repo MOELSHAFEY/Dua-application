@@ -15,7 +15,7 @@ class CustomLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = primaryColor ?? AppColors.primary;
+    final color = primaryColor ?? Theme.of(context).colorScheme.primary;
 
     return Center(
       child: SizedBox(

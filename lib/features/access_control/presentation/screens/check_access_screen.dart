@@ -42,6 +42,9 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return ChangeNotifierProvider(
       create: (_) => di.sl<AccessProvider>()..checkAccess(),
       child: Consumer<AccessProvider>(
@@ -49,7 +52,7 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
           _handleStatusChange(context, provider);
 
           return Scaffold(
-            backgroundColor: AppColors.scaffoldBackground,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             body: SafeArea(
               child: Center(
                 child: Padding(
@@ -61,12 +64,12 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
                         width: 80,
                         height: 80,
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.1),
+                          color: primaryColor.withValues(alpha: isDark ? 0.15 : 0.1),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.verified_user_outlined,
-                          color: AppColors.primary,
+                          color: primaryColor,
                           size: 40,
                         ),
                       ),
@@ -76,7 +79,7 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
                         style: GoogleFonts.cairo(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -85,7 +88,7 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
                         textAlign: TextAlign.center,
                         style: GoogleFonts.cairo(
                           fontSize: 14,
-                          color: AppColors.textSecondary,
+                          color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
                         ),
                       ),
                       const SizedBox(height: 36),
@@ -156,23 +159,26 @@ class _AppDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        backgroundColor: AppColors.surface,
+        backgroundColor: isDark ? AppColors.surfaceDark : AppColors.surface,
         contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
         actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
         title: Row(
           children: [
-            Icon(icon, size: 24, color: AppColors.primary),
+            Icon(icon, size: 24, color: primaryColor),
             const SizedBox(width: 10),
             Text(
               title,
               style: GoogleFonts.cairo(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ],
@@ -181,7 +187,7 @@ class _AppDialog extends StatelessWidget {
           message,
           style: GoogleFonts.cairo(
             fontSize: 14,
-            color: AppColors.textSecondary,
+            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
             height: 1.5,
           ),
         ),
@@ -191,8 +197,8 @@ class _AppDialog extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
+                backgroundColor: primaryColor,
+                foregroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),

@@ -14,6 +14,11 @@ class DrugActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? AppColors.cardBackgroundDark : AppColors.cardBackground;
+    final borderColor = isDark ? AppColors.borderDark : AppColors.border;
+    final textColor = Theme.of(context).colorScheme.onSurface;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ElevatedButton.icon(
@@ -31,10 +36,10 @@ class DrugActionButtons extends StatelessWidget {
           ),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: isFavorite ? AppColors.error : AppColors.surface,
-          foregroundColor: isFavorite ? Colors.white : AppColors.textPrimary,
+          backgroundColor: isFavorite ? AppColors.error : cardBg,
+          foregroundColor: isFavorite ? Colors.white : textColor,
           side: BorderSide(
-            color: isFavorite ? AppColors.error : AppColors.border,
+            color: isFavorite ? AppColors.error : borderColor,
             width: 1,
           ),
           elevation: 0,

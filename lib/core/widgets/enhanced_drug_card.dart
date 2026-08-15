@@ -24,6 +24,19 @@ class EnhancedDrugCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final favoritesProvider = context.watch<FavoritesProvider>();
     final isFavorite = favoritesProvider.isFavorite(drug.id);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final cardBg = isDark ? AppColors.cardBackgroundDark : AppColors.cardBackground;
+    final borderColor = isDark ? AppColors.borderDark : AppColors.border;
+    final imageBg = isDark ? AppColors.surfaceElevatedDark : AppColors.grey50;
+
+    final priceBg = isDark
+        ? AppColors.successBackgroundDark.withValues(alpha: 0.4)
+        : AppColors.successLight;
+    final priceBorder = isDark
+        ? AppColors.successDark.withValues(alpha: 0.3)
+        : AppColors.success.withValues(alpha: 0.2);
+    final priceTextColor = isDark ? AppColors.successDark : AppColors.success;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -41,7 +54,11 @@ class EnhancedDrugCard extends StatelessWidget {
                     ? 'تمت إزالة ${drug.name} من المفضلة'
                     : 'تمت إضافة ${drug.name} إلى المفضلة',
                 textDirection: TextDirection.rtl,
-                style: GoogleFonts.cairo(fontWeight: FontWeight.w600, fontSize: 13),
+                style: GoogleFonts.cairo(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                  color: Colors.white,
+                ),
               ),
               backgroundColor: isFavorite ? AppColors.textSecondary : AppColors.success,
               behavior: SnackBarBehavior.floating,
@@ -84,9 +101,9 @@ class EnhancedDrugCard extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
-            side: const BorderSide(color: AppColors.border, width: 1),
+            side: BorderSide(color: borderColor, width: 1),
           ),
-          color: Theme.of(context).cardColor,
+          color: cardBg,
           child: InkWell(
             onTap: onTap,
             borderRadius: BorderRadius.circular(14),
@@ -101,9 +118,9 @@ class EnhancedDrugCard extends StatelessWidget {
                       width: 72,
                       height: 72,
                       decoration: BoxDecoration(
-                        color: AppColors.grey50,
+                        color: imageBg,
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: AppColors.border, width: 0.5),
+                        border: Border.all(color: borderColor, width: 0.5),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
@@ -113,10 +130,10 @@ class EnhancedDrugCard extends StatelessWidget {
                                 image: NetworkImage(drug.image),
                                 fit: BoxFit.cover,
                                 imageErrorBuilder: (context, error, stackTrace) {
-                                  return _buildPlaceholderIcon();
+                                  return _buildPlaceholderIcon(context);
                                 },
                               )
-                            : _buildPlaceholderIcon(),
+                            : _buildPlaceholderIcon(context),
                       ),
                     ),
                   ),
@@ -136,24 +153,21 @@ class EnhancedDrugCard extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppColors.successLight,
+                            color: priceBg,
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: AppColors.success.withValues(alpha: 0.2),
-                              width: 0.5,
-                            ),
+                            border: Border.all(color: priceBorder, width: 0.5),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.sell_outlined, size: 14, color: AppColors.success),
+                              Icon(Icons.sell_outlined, size: 14, color: priceTextColor),
                               const SizedBox(width: 4),
                               Text(
                                 '${drug.price} جنيه',
                                 style: GoogleFonts.cairo(
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.success,
+                                  color: priceTextColor,
                                 ),
                               ),
                             ],
@@ -173,10 +187,10 @@ class EnhancedDrugCard extends StatelessWidget {
                         size: 16,
                       ),
                     ),
-                  const Icon(
+                  Icon(
                     Icons.arrow_back_ios_new_rounded,
                     size: 14,
-                    color: AppColors.textLight,
+                    color: isDark ? AppColors.textLightDark : AppColors.textLight,
                   ),
                 ],
               ),
@@ -189,13 +203,18 @@ class EnhancedDrugCard extends StatelessWidget {
 
   Widget _buildHighlightedName(String text, String query, BuildContext context) {
     final cleanQuery = query.trim();
+    final textColor = Theme.of(context).colorScheme.onSurface;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final highlightColor = isDark ? AppColors.primaryLight : AppColors.primary;
+    final highlightBg = highlightColor.withValues(alpha: isDark ? 0.25 : 0.12);
+
     if (cleanQuery.isEmpty || !text.toLowerCase().contains(cleanQuery.toLowerCase())) {
       return Text(
         text,
         style: GoogleFonts.cairo(
           fontSize: 15,
           fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.onSurface,
+          color: textColor,
           height: 1.3,
         ),
         maxLines: 2,
@@ -215,7 +234,7 @@ class EnhancedDrugCard extends StatelessWidget {
           spans.add(
             TextSpan(
               text: text.substring(start),
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              style: TextStyle(color: textColor),
             ),
           );
         }
@@ -226,7 +245,7 @@ class EnhancedDrugCard extends StatelessWidget {
         spans.add(
           TextSpan(
             text: text.substring(start, index),
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            style: TextStyle(color: textColor),
           ),
         );
       }
@@ -235,9 +254,9 @@ class EnhancedDrugCard extends StatelessWidget {
         TextSpan(
           text: text.substring(index, index + cleanQuery.length),
           style: TextStyle(
-            color: AppColors.primary,
+            color: highlightColor,
             fontWeight: FontWeight.w900,
-            backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+            backgroundColor: highlightBg,
           ),
         ),
       );
@@ -259,12 +278,13 @@ class EnhancedDrugCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPlaceholderIcon() {
-    return const Center(
+  Widget _buildPlaceholderIcon(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Center(
       child: Icon(
         Icons.medication_outlined,
         size: 32,
-        color: AppColors.textLight,
+        color: isDark ? AppColors.textLightDark : AppColors.textLight,
       ),
     );
   }

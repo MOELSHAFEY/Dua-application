@@ -31,15 +31,19 @@ class ShimmerLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final baseColor = isDark ? AppColors.surfaceElevatedDark : AppColors.grey200;
+    final highlightColor = isDark ? AppColors.cardBackgroundDark : AppColors.grey100;
+
     return Shimmer.fromColors(
-      baseColor: AppColors.grey200,
-      highlightColor: AppColors.grey100,
+      baseColor: baseColor,
+      highlightColor: highlightColor,
       period: const Duration(milliseconds: 1500),
       child: Container(
         width: width,
         height: height,
         decoration: ShapeDecoration(
-          color: AppColors.grey300,
+          color: isDark ? AppColors.cardBackgroundDark : AppColors.grey300,
           shape: shapeBorder,
         ),
       ),
@@ -52,6 +56,10 @@ class DrugListShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? AppColors.cardBackgroundDark : AppColors.cardBackground;
+    final borderColor = isDark ? AppColors.borderDark : AppColors.border;
+
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -62,33 +70,21 @@ class DrugListShimmer extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.symmetric(vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.08),
-                  blurRadius: 15,
-                  spreadRadius: 2,
-                  offset: const Offset(0, 4),
-                ),
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 5,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+              color: cardBg,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: borderColor, width: 1),
             ),
             child: Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
                   // Image Shimmer
                   ShimmerLoading.rounded(
-                    width: 80,
-                    height: 80,
-                    borderRadius: 12,
+                    width: 72,
+                    height: 72,
+                    borderRadius: 10,
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 14),
 
                   // Info Shimmer
                   Expanded(
@@ -98,15 +94,15 @@ class DrugListShimmer extends StatelessWidget {
                         // Name Shimmer
                         ShimmerLoading.rounded(
                           width: double.infinity,
-                          height: 18,
+                          height: 16,
                           borderRadius: 4,
                         ),
-                        const SizedBox(height: 8),
-                        
+                        const SizedBox(height: 10),
+
                         // Price Badge Shimmer
                         ShimmerLoading.rounded(
-                          width: 100,
-                          height: 28,
+                          width: 90,
+                          height: 24,
                           borderRadius: 8,
                         ),
                       ],

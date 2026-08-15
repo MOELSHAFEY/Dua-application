@@ -351,27 +351,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSearchField() {
     final isFocused = _focusNode.hasFocus;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    final borderColor = isFocused
+        ? primaryColor
+        : (isDark ? AppColors.borderDark : AppColors.border);
+    final fieldBg = isFocused
+        ? Theme.of(context).cardColor
+        : (isDark ? AppColors.surfaceElevatedDark : AppColors.grey50);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
-        color: isFocused ? Theme.of(context).cardColor : AppColors.grey50,
+        color: fieldBg,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: isFocused ? AppColors.primary : AppColors.border,
+          color: borderColor,
           width: isFocused ? 1.5 : 1.0,
         ),
         boxShadow: isFocused
             ? [
                 BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.08),
+                  color: primaryColor.withValues(alpha: isDark ? 0.15 : 0.08),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
               ]
             : [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.02),
+                  color: Colors.black.withValues(alpha: isDark ? 0.1 : 0.02),
                   blurRadius: 4,
                   offset: const Offset(0, 1),
                 ),
@@ -393,13 +401,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: isFocused
-                      ? AppColors.primary.withValues(alpha: 0.1)
+                      ? primaryColor.withValues(alpha: 0.1)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
                   Icons.search_rounded,
-                  color: isFocused ? AppColors.primary : AppColors.textSecondary,
+                  color: isFocused ? primaryColor : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondary),
                   size: 22,
                 ),
               ),

@@ -15,6 +15,15 @@ class DrugEcommerceHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final priceBg = isDark
+        ? AppColors.successBackgroundDark.withValues(alpha: 0.4)
+        : AppColors.successLight;
+    final priceBorder = isDark
+        ? AppColors.successDark.withValues(alpha: 0.3)
+        : AppColors.success.withValues(alpha: 0.2);
+    final priceTextColor = isDark ? AppColors.successDark : AppColors.success;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Column(
@@ -26,7 +35,7 @@ class DrugEcommerceHeader extends StatelessWidget {
             style: GoogleFonts.cairo(
               fontSize: isTablet ? 26 : 22,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: Theme.of(context).colorScheme.onSurface,
               height: 1.3,
             ),
             textAlign: TextAlign.right,
@@ -37,21 +46,21 @@ class DrugEcommerceHeader extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
-              color: AppColors.successLight,
+              color: priceBg,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.success.withValues(alpha: 0.2), width: 1),
+              border: Border.all(color: priceBorder, width: 1),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.sell_outlined, size: 18, color: AppColors.success),
+                Icon(Icons.sell_outlined, size: 18, color: priceTextColor),
                 const SizedBox(width: 6),
                 Text(
                   '${drug.price} جنيه مصري',
                   style: GoogleFonts.cairo(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.success,
+                    color: priceTextColor,
                   ),
                 ),
               ],

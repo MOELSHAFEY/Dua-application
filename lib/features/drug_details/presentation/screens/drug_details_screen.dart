@@ -180,9 +180,9 @@ class _DrugDetailsScreenState extends State<DrugDetailsScreen> {
           return Directionality(
             textDirection: TextDirection.rtl,
             child: Scaffold(
-              backgroundColor: AppColors.scaffoldBackground,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               appBar: AppBar(
-                backgroundColor: AppColors.surface,
+                backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
                 elevation: 0,
                 scrolledUnderElevation: 1,
                 title: Text(
@@ -190,24 +190,24 @@ class _DrugDetailsScreenState extends State<DrugDetailsScreen> {
                   style: GoogleFonts.cairo(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary),
+                  icon: Icon(Icons.arrow_back_rounded, color: Theme.of(context).colorScheme.onSurface),
                   onPressed: () => Navigator.pop(context),
                 ),
                 actions: [
                   IconButton(
                     icon: Icon(
                       isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                      color: isFavorite ? AppColors.error : AppColors.textSecondary,
+                      color: isFavorite ? AppColors.error : Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     tooltip: isFavorite ? 'إزالة من المفضلة' : 'إضافة للمفضلة',
                     onPressed: () => favoritesProvider.toggleFavorite(widget.drug),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.share_outlined, color: AppColors.textSecondary),
+                    icon: Icon(Icons.share_outlined, color: Theme.of(context).colorScheme.onSurfaceVariant),
                     tooltip: 'مشاركة',
                     onPressed: () => _shareDrug(drugProvider.drugInfo),
                   ),

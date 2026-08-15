@@ -18,6 +18,9 @@ class EmptyStateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
@@ -28,13 +31,13 @@ class EmptyStateWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.08),
+                color: primaryColor.withValues(alpha: isDark ? 0.15 : 0.08),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 icon,
                 size: 48,
-                color: AppColors.primary,
+                color: primaryColor,
               ),
             ),
             const SizedBox(height: 20),
@@ -44,7 +47,7 @@ class EmptyStateWidget extends StatelessWidget {
               style: GoogleFonts.cairo(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 8),
@@ -53,7 +56,7 @@ class EmptyStateWidget extends StatelessWidget {
               textAlign: TextAlign.center,
               style: GoogleFonts.cairo(
                 fontSize: 14,
-                color: AppColors.textSecondary,
+                color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
                 height: 1.5,
               ),
             ),
