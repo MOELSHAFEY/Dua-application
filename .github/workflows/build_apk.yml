@@ -26,11 +26,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Make gradlew executable
-      - name: Make Gradle wrapper executable
-        run: chmod +x android/gradlew
-
-      # 3. Set up Java JDK 17 (Required for Gradle & Android Gradle Plugin)
+      # 2. Set up Java JDK 17 (Required for Gradle & Android Gradle Plugin)
       - name: Set up Java JDK 17
         uses: actions/setup-java@v4
         with:
