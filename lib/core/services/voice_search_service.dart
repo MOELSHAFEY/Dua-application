@@ -9,10 +9,7 @@ class VoiceSearchService {
 
   Future<bool> initialize() async {
     if (_isInitialized) return true;
-    _isInitialized = await _speechToText.initialize(
-      onError: (errorNotification) => print('Error: $errorNotification'),
-      onStatus: (status) => print('Status: $status'),
-    );
+    _isInitialized = await _speechToText.initialize();
     return _isInitialized;
   }
 
@@ -30,7 +27,9 @@ class VoiceSearchService {
             onListeningStateChanged(false);
           }
         },
-        localeId: 'ar_EG', // Focus on Arabic as per app context
+        listenOptions: SpeechListenOptions(
+          localeId: 'ar_EG',
+        ),
       );
     } else {
       onListeningStateChanged(false);

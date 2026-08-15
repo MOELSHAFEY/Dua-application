@@ -133,10 +133,12 @@ class _DrugDetailsScreenState extends State<DrugDetailsScreen> {
       final shareText =
           'اسم الدواء: ${widget.drug.name}\n\nالسعر: ${widget.drug.price} جنيه\n\nالتفاصيل :$drugInfo\n\n لتحميل التطبيق من هنا : https://t.me/elshafey_Team';
 
-      await Share.shareXFiles(
-        [XFile(imagePath.path)],
-        text: shareText,
-        subject: 'معلومات الدواء ${widget.drug.name}',
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(imagePath.path)],
+          text: shareText,
+          subject: 'معلومات الدواء ${widget.drug.name}',
+        ),
       );
     } catch (e) {
       _showSnackBar("فشل في مشاركة الدواء", isError: true);

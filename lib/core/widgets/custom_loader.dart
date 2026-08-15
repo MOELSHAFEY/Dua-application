@@ -17,7 +17,7 @@ class CustomLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primary = primaryColor ?? AppColors.primary;
-    final accent = accentColor ?? primary.withOpacity(0.2);
+    final accent = accentColor ?? primary.withValues(alpha: 0.2);
 
     return Center(
       child: SizedBox(
@@ -39,7 +39,7 @@ class CustomLoader extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: primary.withOpacity(0.15),
+                        color: primary.withValues(alpha: 0.15),
                         blurRadius: 25,
                         spreadRadius: 5,
                       ),
@@ -62,9 +62,9 @@ class CustomLoader extends StatelessWidget {
                   gradient: SweepGradient(
                     colors: [
                       primary,
-                      primary.withOpacity(0.7),
+                      primary.withValues(alpha: 0.7),
                       accent,
-                      accent.withOpacity(0.1),
+                      accent.withValues(alpha: 0.1),
                       Colors.transparent,
                       Colors.transparent,
                     ],
@@ -80,7 +80,7 @@ class CustomLoader extends StatelessWidget {
               height: size * 0.7,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: accent.withOpacity(0.3), width: 2),
+                border: Border.all(color: accent.withValues(alpha: 0.3), width: 2),
               ),
             ),
 
@@ -98,8 +98,8 @@ class CustomLoader extends StatelessWidget {
                     colors: [
                       Colors.transparent,
                       Colors.transparent,
-                      primary.withOpacity(0.5),
-                      primary.withOpacity(0.3),
+                      primary.withValues(alpha: 0.5),
+                      primary.withValues(alpha: 0.3),
                       Colors.transparent,
                     ],
                     stops: const [0.0, 0.4, 0.6, 0.8, 1.0],
@@ -120,7 +120,7 @@ class CustomLoader extends StatelessWidget {
                   color: primary,
                   boxShadow: [
                     BoxShadow(
-                      color: primary.withOpacity(0.4),
+                      color: primary.withValues(alpha: 0.4),
                       blurRadius: 12,
                       spreadRadius: 2,
                     ),
@@ -141,9 +141,9 @@ class CustomLoader extends StatelessWidget {
                 height: size * 0.15,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withValues(alpha: 0.3),
                   gradient: RadialGradient(
-                    colors: [Colors.white.withOpacity(0.4), Colors.transparent],
+                    colors: [Colors.white.withValues(alpha: 0.4), Colors.transparent],
                   ),
                 ),
               ),
@@ -184,15 +184,15 @@ class CustomLoaderMinimal extends StatelessWidget {
                   border: Border(
                     top: BorderSide(color: loaderColor, width: 3),
                     right: BorderSide(
-                      color: loaderColor.withOpacity(0.3),
+                      color: loaderColor.withValues(alpha: 0.3),
                       width: 3,
                     ),
                     bottom: BorderSide(
-                      color: loaderColor.withOpacity(0.1),
+                      color: loaderColor.withValues(alpha: 0.1),
                       width: 3,
                     ),
                     left: BorderSide(
-                      color: loaderColor.withOpacity(0.6),
+                      color: loaderColor.withValues(alpha: 0.6),
                       width: 3,
                     ),
                   ),
@@ -252,7 +252,7 @@ class CustomLoaderDots extends StatelessWidget {
             color: color,
             boxShadow: [
               BoxShadow(
-                color: color.withOpacity(0.4),
+                color: color.withValues(alpha: 0.4),
                 blurRadius: 8,
                 spreadRadius: 1,
               ),
