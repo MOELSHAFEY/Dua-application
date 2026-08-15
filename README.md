@@ -96,7 +96,7 @@ lib/
 ### 🧱 Layer Decomposition
 - **Data Layer**: Repositories, data sources, and models (Hive/API).
 - **Domain Layer**: Pure business logic (Entities and Use Cases).
-- **Presentation Layer**: BLoC/Cubit for state management and Flutter UI.
+- **Presentation Layer**: Provider (`ChangeNotifier`) for state management and Flutter UI.
 
 ---
 
@@ -105,7 +105,7 @@ lib/
 | Category | Technology |
 | :--- | :--- |
 | **Framework** | [Flutter](https://flutter.dev/) (^3.7.2) |
-| **State Management** | [flutter_bloc](https://pub.dev/packages/flutter_bloc) |
+| **State Management** | [Provider](https://pub.dev/packages/provider) |
 | **Local Database** | [Hive](https://pub.dev/packages/hive) |
 | **Dependency Injection** | [GetIt](https://pub.dev/packages/get_it) |
 | **Functional Error Handling** | [Dartz](https://pub.dev/packages/dartz) |

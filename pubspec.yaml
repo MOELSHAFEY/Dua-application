@@ -46,7 +46,6 @@ dependencies:
   share_plus: ^11.0.0
   path_provider: ^2.1.4
   provider: ^6.1.5+1
-  flutter_bloc: ^9.1.1
   get_it: ^9.2.1
   equatable: ^2.0.8
   dartz: ^0.10.1
