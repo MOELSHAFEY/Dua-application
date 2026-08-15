@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'core/di/injection_container.dart' as di;
 import 'core/theme/themes.dart';
-import 'package:provider/provider.dart';
-import 'package:dua/features/drug_search/presentation/cubit/search_cubit.dart';
+import 'package:dua/features/drug_search/presentation/providers/search_provider.dart';
+import 'package:dua/features/drug_search/presentation/providers/search_history_provider.dart';
 import 'package:dua/features/favorites/presentation/providers/favorites_provider.dart';
 import 'package:dua/features/access_control/presentation/providers/access_provider.dart';
-import 'features/splash/presentation/pages/splash_screen.dart';
+import 'features/splash/presentation/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,12 +28,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => di.sl<AccessProvider>()),
         ChangeNotifierProvider(create: (_) => di.sl<FavoritesProvider>()..init()),
+        ChangeNotifierProvider(create: (_) => di.sl<SearchProvider>()),
+        ChangeNotifierProvider(create: (_) => di.sl<SearchHistoryProvider>()..initHive()),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (_) => di.sl<SearchCubit>()),
-        ],
-        child: MaterialApp(
+      child: MaterialApp(
         title: 'Dua',
         debugShowCheckedModeBanner: false,
         theme: AppThemes.lightTheme,
@@ -50,7 +48,6 @@ class MyApp extends StatelessWidget {
         ],
         home: const SplashScreen(),
       ),
-    ),
-  );
-}
+    );
+  }
 }

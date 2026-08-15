@@ -9,7 +9,8 @@ import 'package:dua/features/drug_search/data/datasources/drug_remote_data_sourc
 import 'package:dua/features/drug_search/data/repositories/drug_repository_impl.dart';
 import 'package:dua/features/drug_search/domain/repositories/drug_repository.dart';
 import 'package:dua/features/drug_search/domain/usecases/search_drugs_usecase.dart';
-import 'package:dua/features/drug_search/presentation/cubit/search_cubit.dart';
+import 'package:dua/features/drug_search/presentation/providers/search_provider.dart';
+import 'package:dua/features/drug_search/presentation/providers/search_history_provider.dart';
 import 'package:dua/features/drug_details/data/datasources/drug_details_remote_data_source.dart';
 import 'package:dua/features/drug_details/data/repositories/drug_details_repository_impl.dart';
 import 'package:dua/features/drug_details/domain/repositories/drug_details_repository.dart';
@@ -29,7 +30,8 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   // Features - Drug Search
-  sl.registerFactory(() => SearchCubit(searchDrugsUseCase: sl()));
+  sl.registerFactory(() => SearchProvider(searchDrugsUseCase: sl()));
+  sl.registerLazySingleton(() => SearchHistoryProvider());
   sl.registerLazySingleton(() => SearchDrugsUseCase(sl()));
   sl.registerLazySingleton<DrugRepository>(
     () => DrugRepositoryImpl(remoteDataSource: sl()),

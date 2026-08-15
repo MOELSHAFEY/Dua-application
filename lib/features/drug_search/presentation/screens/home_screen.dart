@@ -1,6 +1,5 @@
-import 'package:dua/features/app_info/app_info_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animate_do/animate_do.dart';
 
@@ -8,12 +7,13 @@ import 'package:dua/core/theme/colors.dart';
 import 'package:dua/core/widgets/empty_state_widget.dart';
 import 'package:dua/core/widgets/enhanced_drug_card.dart';
 import 'package:dua/core/widgets/shimmer_loading.dart';
+import 'package:dua/features/app_info/presentation/screens/app_info_screen.dart';
 import 'package:dua/features/favorites/presentation/screens/favorites_screen.dart';
-import 'package:dua/features/drug_search/presentation/cubit/search_cubit.dart';
-import 'package:dua/features/drug_search/presentation/cubit/search_state.dart';
 import 'package:dua/features/drug_details/presentation/screens/drug_details_screen.dart';
 import 'package:dua/core/services/voice_search_service.dart';
 import 'package:dua/core/di/injection_container.dart' as di;
+import '../providers/search_provider.dart';
+import '../providers/search_history_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,8 +29,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    _voiceSearchService.stopListening();
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onPerformSearch(String query) {
+    if (query.trim().isNotEmpty) {
+      context.read<SearchProvider>().search(query);
+      context.read<SearchHistoryProvider>().addSearch(query.trim());
+    }
   }
 
   @override
@@ -182,13 +190,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSearchScreen() {
-    return BlocConsumer<SearchCubit, SearchState>(
-      listener: (context, state) {
-        if (state is SearchError) {
-          _showErrorSnackBar(state.message);
-        }
-      },
-      builder: (context, state) {
+    return Consumer<SearchProvider>(
+      builder: (context, searchProvider, _) {
         return Stack(
           children: [
             SingleChildScrollView(
@@ -200,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     _buildSearchField(),
                     const SizedBox(height: 32),
-                    _buildResults(state),
+                    _buildResults(searchProvider),
                   ],
                 ),
               ),
@@ -228,11 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: TextField(
           controller: _searchController,
-          onSubmitted: (query) {
-            if (query.trim().isNotEmpty) {
-              context.read<SearchCubit>().search(query);
-            }
-          },
+          onSubmitted: _onPerformSearch,
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.right,
           style: GoogleFonts.cairo(
@@ -259,9 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   size: 24,
                 ),
                 onPressed: () {
-                  if (_searchController.text.trim().isNotEmpty) {
-                    context.read<SearchCubit>().search(_searchController.text);
-                  }
+                  _onPerformSearch(_searchController.text);
                 },
               ),
             ),
@@ -288,25 +285,25 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildResults(SearchState state) {
-    if (state is SearchInitial) {
+  Widget _buildResults(SearchProvider provider) {
+    if (provider.isInitial) {
       return _buildInitialState();
-    } else if (state is SearchLoading) {
+    } else if (provider.isLoading) {
       return FadeIn(
         duration: const Duration(milliseconds: 300),
         child: const DrugListShimmer(),
       );
-    } else if (state is SearchLoaded) {
-      if (state.drugs.isEmpty) {
+    } else if (provider.isLoaded) {
+      if (provider.drugs.isEmpty) {
         return _buildEmptyState();
       }
       return ListView.separated(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: state.drugs.length,
+        itemCount: provider.drugs.length,
         separatorBuilder: (_, __) => const SizedBox(height: 8),
         itemBuilder: (context, index) {
-          final drug = state.drugs[index];
+          final drug = provider.drugs[index];
           return EnhancedDrugCard(
             drug: drug,
             index: index,
@@ -321,8 +318,8 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       );
-    } else if (state is SearchError) {
-      return _buildErrorState(state.message);
+    } else if (provider.isError) {
+      return _buildErrorState(provider.errorMessage);
     }
     return const SizedBox.shrink();
   }
@@ -380,20 +377,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          textDirection: TextDirection.rtl,
-          style: GoogleFonts.cairo(),
-        ),
-        backgroundColor: AppColors.primaryDark,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
-
   void _toggleListening() async {
     if (_isListening) {
       await _voiceSearchService.stopListening();
@@ -403,9 +386,7 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             _searchController.text = text;
           });
-          if (text.trim().isNotEmpty) {
-            context.read<SearchCubit>().search(text);
-          }
+          _onPerformSearch(text);
         },
         onListeningStateChanged: (isListening) {
           setState(() {

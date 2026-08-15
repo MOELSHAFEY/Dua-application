@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../../core/widgets/custom_loader.dart';
-import '../../../drug_search/presentation/pages/home_screen.dart';
+import '../../../drug_search/presentation/screens/home_screen.dart';
 import '../providers/access_provider.dart';
 
 class CheckAccessScreen extends StatefulWidget {
