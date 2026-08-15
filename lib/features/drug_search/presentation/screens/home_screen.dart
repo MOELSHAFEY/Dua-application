@@ -23,11 +23,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   bool _isListening = false;
   final VoiceSearchService _voiceSearchService = di.sl<VoiceSearchService>();
 
   @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
   void dispose() {
+    _focusNode.dispose();
     _voiceSearchService.stopListening();
     _searchController.dispose();
     super.dispose();
@@ -212,8 +222,45 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Container(
                 color: AppColors.surface,
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 14),
-                child: _buildSearchField(),
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 14),
+                child: Column(
+                  children: [
+                    _buildSearchField(),
+                    if (_isListening) ...[
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.errorLight,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: AppColors.error.withValues(alpha: 0.2)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: const BoxDecoration(
+                                color: AppColors.error,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'جاري الاستماع... تحدث الآن باسم الدواء',
+                              style: GoogleFonts.cairo(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.error,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               ),
               Expanded(
                 child: _buildResults(searchProvider),
@@ -226,70 +273,156 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSearchField() {
-    return TextField(
-      controller: _searchController,
-      onSubmitted: _onPerformSearch,
-      textDirection: TextDirection.rtl,
-      textAlign: TextAlign.right,
-      style: GoogleFonts.cairo(
-        fontWeight: FontWeight.w600,
-        fontSize: 15,
-        color: AppColors.textPrimary,
+    final isFocused = _focusNode.hasFocus;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      decoration: BoxDecoration(
+        color: isFocused ? AppColors.surface : AppColors.grey50,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: isFocused ? AppColors.primary : AppColors.border,
+          width: isFocused ? 1.5 : 1.0,
+        ),
+        boxShadow: isFocused
+            ? [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.08),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ]
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.02),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
       ),
-      decoration: InputDecoration(
-        hintText: 'ابحث بالاسم التجاري أو المادة الفعالة...',
-        hintStyle: GoogleFonts.cairo(
-          color: AppColors.textLight,
-          fontSize: 14,
-        ),
-        filled: true,
-        fillColor: AppColors.grey50,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        prefixIcon: IconButton(
-          icon: Icon(
-            _isListening ? Icons.mic : Icons.mic_none_rounded,
-            color: _isListening ? AppColors.error : AppColors.primary,
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      child: Row(
+        children: [
+          // Search Icon & Submit Button
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+              onTap: () => _onPerformSearch(_searchController.text),
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: isFocused
+                      ? AppColors.primary.withValues(alpha: 0.1)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  Icons.search_rounded,
+                  color: isFocused ? AppColors.primary : AppColors.textSecondary,
+                  size: 22,
+                ),
+              ),
+            ),
           ),
-          tooltip: 'بحث صوتي',
-          onPressed: _toggleVoiceSearch,
-        ),
-        suffixIcon: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (_searchController.text.isNotEmpty)
-              IconButton(
-                icon: const Icon(Icons.clear_rounded, size: 18, color: AppColors.textLight),
-                onPressed: () {
+          const SizedBox(width: 6),
+
+          // Search Input Field
+          Expanded(
+            child: TextField(
+              controller: _searchController,
+              focusNode: _focusNode,
+              onSubmitted: _onPerformSearch,
+              textInputAction: TextInputAction.search,
+              textDirection: TextDirection.rtl,
+              textAlign: TextAlign.right,
+              style: GoogleFonts.cairo(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                color: AppColors.textPrimary,
+              ),
+              decoration: InputDecoration(
+                hintText: 'ابحث باسم الدواء التجاري أو العلمي...',
+                hintStyle: GoogleFonts.cairo(
+                  color: AppColors.textLight,
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                ),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                filled: false,
+                contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                isDense: true,
+              ),
+              onChanged: (val) {
+                if (val.isEmpty) {
+                  context.read<SearchProvider>().clearSearch();
+                }
+                setState(() {});
+              },
+            ),
+          ),
+
+          // Clear Button
+          if (_searchController.text.isNotEmpty) ...[
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(8),
+                onTap: () {
                   _searchController.clear();
                   context.read<SearchProvider>().clearSearch();
                   setState(() {});
                 },
+                child: const Padding(
+                  padding: EdgeInsets.all(6),
+                  child: Icon(
+                    Icons.close_rounded,
+                    size: 18,
+                    color: AppColors.textLight,
+                  ),
+                ),
               ),
-            IconButton(
-              icon: const Icon(Icons.search_rounded, color: AppColors.primary),
-              onPressed: () => _onPerformSearch(_searchController.text),
+            ),
+            Container(
+              width: 1,
+              height: 20,
+              color: AppColors.border,
+              margin: const EdgeInsets.symmetric(horizontal: 4),
             ),
           ],
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-        ),
+
+          // Voice Search Mic Button
+          Material(
+            color: Colors.transparent,
+            child: Tooltip(
+              message: _isListening ? 'إيقاف الاستماع' : 'بحث صوتي',
+              child: InkWell(
+                borderRadius: BorderRadius.circular(10),
+                onTap: _toggleVoiceSearch,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: _isListening
+                        ? AppColors.error
+                        : (_focusNode.hasFocus ? AppColors.primary.withValues(alpha: 0.08) : Colors.transparent),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    _isListening ? Icons.mic_rounded : Icons.mic_none_rounded,
+                    color: _isListening
+                        ? Colors.white
+                        : (_focusNode.hasFocus ? AppColors.primary : AppColors.textSecondary),
+                    size: 20,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
-      onChanged: (val) {
-        if (val.isEmpty) {
-          context.read<SearchProvider>().clearSearch();
-        }
-        setState(() {});
-      },
     );
   }
 
