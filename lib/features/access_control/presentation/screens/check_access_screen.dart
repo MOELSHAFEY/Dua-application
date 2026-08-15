@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,8 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../../../drug_search/presentation/pages/home_screen.dart';
-import '../cubit/access_cubit.dart';
-import '../cubit/access_state.dart';
+import '../providers/access_provider.dart';
 
 class CheckAccessScreen extends StatefulWidget {
   const CheckAccessScreen({super.key});
@@ -18,28 +17,43 @@ class CheckAccessScreen extends StatefulWidget {
 }
 
 class _CheckAccessScreenState extends State<CheckAccessScreen> {
+  AccessStatus? _lastHandledStatus;
+
   @override
   void initState() {
     super.initState();
-    context.read<AccessCubit>().checkAccess();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<AccessProvider>().checkAccess();
+      }
+    });
+  }
+
+  void _handleStatusChange(AccessProvider provider) {
+    if (_lastHandledStatus == provider.status) return;
+    _lastHandledStatus = provider.status;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (provider.isAuthorized) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
+      } else if (provider.isUpdateRequired) {
+        _showUpdateDialog(provider.updateUrl);
+      } else if (provider.isError) {
+        _showErrorDialog(provider.errorMessage);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AccessCubit, AccessState>(
-      listener: (context, state) {
-        if (state is AccessAuthorized) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const HomeScreen()),
-          );
-        } else if (state is AccessUpdateRequired) {
-          _showUpdateDialog(state.updateUrl);
-        } else if (state is AccessError) {
-          _showErrorDialog(state.message);
-        }
-      },
-      builder: (context, state) {
+    return Consumer<AccessProvider>(
+      builder: (context, provider, child) {
+        _handleStatusChange(provider);
+
         return Scaffold(
           body: Container(
             width: double.infinity,
@@ -129,17 +143,17 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
       context: context,
       barrierDismissible: false,
       builder: (_) => _AppDialog(
-            icon: Icons.system_update_alt,
-            title: "تحديث مطلوب",
-            message: "للاستمرار، يرجى تحديث التطبيق إلى أحدث إصدار.",
-            buttonText: "تحديث الآن",
-            onPressed: () async {
-              final uri = Uri.parse(updateUrl);
-              if (await canLaunchUrl(uri)) {
-                await launchUrl(uri, mode: LaunchMode.externalApplication);
-              }
-            },
-          ),
+        icon: Icons.system_update_alt,
+        title: "تحديث مطلوب",
+        message: "للاستمرار، يرجى تحديث التطبيق إلى أحدث إصدار.",
+        buttonText: "تحديث الآن",
+        onPressed: () async {
+          final uri = Uri.parse(updateUrl);
+          if (await canLaunchUrl(uri)) {
+            await launchUrl(uri, mode: LaunchMode.externalApplication);
+          }
+        },
+      ),
     );
   }
 
@@ -148,15 +162,16 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
       context: context,
       barrierDismissible: false,
       builder: (_) => _AppDialog(
-            icon: Icons.wifi_off,
-            title: "مشكلة اتصال",
-            message: message,
-            buttonText: "إعادة المحاولة",
-            onPressed: () {
-              Navigator.pop(context);
-              context.read<AccessCubit>().checkAccess();
-            },
-          ),
+        icon: Icons.wifi_off,
+        title: "مشكلة اتصال",
+        message: message,
+        buttonText: "إعادة المحاولة",
+        onPressed: () {
+          Navigator.pop(context);
+          _lastHandledStatus = null;
+          context.read<AccessProvider>().checkAccess();
+        },
+      ),
     );
   }
 }

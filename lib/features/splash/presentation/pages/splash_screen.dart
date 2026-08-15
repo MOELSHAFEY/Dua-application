@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/colors.dart';
-import '../../../access_control/presentation/pages/check_access_screen.dart';
+import '../../../access_control/presentation/screens/check_access_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

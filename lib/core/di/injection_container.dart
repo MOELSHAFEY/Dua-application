@@ -4,7 +4,7 @@ import 'package:dua/features/access_control/data/datasources/access_remote_data_
 import 'package:dua/features/access_control/data/repositories/access_repository_impl.dart';
 import 'package:dua/features/access_control/domain/repositories/access_repository.dart';
 import 'package:dua/features/access_control/domain/usecases/check_version_usecase.dart';
-import 'package:dua/features/access_control/presentation/cubit/access_cubit.dart';
+import 'package:dua/features/access_control/presentation/providers/access_provider.dart';
 import 'package:dua/features/drug_search/data/datasources/drug_remote_data_source.dart';
 import 'package:dua/features/drug_search/data/repositories/drug_repository_impl.dart';
 import 'package:dua/features/drug_search/domain/repositories/drug_repository.dart';
@@ -65,7 +65,7 @@ Future<void> init() async {
   );
 
   // Features - Access Control
-  sl.registerFactory(() => AccessCubit(checkVersionUseCase: sl()));
+  sl.registerFactory(() => AccessProvider(checkVersionUseCase: sl()));
   sl.registerLazySingleton(() => CheckVersionUseCase(sl()));
   sl.registerLazySingleton<AccessRepository>(
     () => AccessRepositoryImpl(remoteDataSource: sl()),
