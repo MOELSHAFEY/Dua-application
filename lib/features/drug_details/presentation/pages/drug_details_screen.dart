@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animate_do/animate_do.dart';
@@ -10,8 +11,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:dua/core/di/injection_container.dart';
 import 'package:dua/core/theme/colors.dart';
 import 'package:dua/core/entities/drug.dart';
-import 'package:dua/features/favorites/presentation/cubit/favorites_cubit.dart';
-import 'package:dua/features/favorites/presentation/cubit/favorites_state.dart';
+import 'package:dua/features/favorites/presentation/providers/favorites_provider.dart';
 import 'package:dua/features/drug_details/presentation/cubit/drug_details_cubit.dart';
 import 'package:dua/features/drug_details/presentation/cubit/drug_details_state.dart';
 import 'package:dua/features/drug_details/presentation/widgets/drug_product_image.dart';
@@ -197,9 +197,9 @@ class _DrugDetailsScreenState extends State<DrugDetailsScreen> {
       create: (context) => sl<DrugDetailsCubit>()..loadDrugInfo(widget.drug.id),
       child: BlocBuilder<DrugDetailsCubit, DrugDetailsState>(
         builder: (context, state) {
-          return BlocBuilder<FavoritesCubit, FavoritesState>(
-            builder: (fContext, fState) {
-              final isFav = context.read<FavoritesCubit>().isFavorite(
+          return Consumer<FavoritesProvider>(
+            builder: (fContext, favoritesProvider, _) {
+              final isFav = favoritesProvider.isFavorite(
                 widget.drug.id,
               );
 
@@ -243,7 +243,7 @@ class _DrugDetailsScreenState extends State<DrugDetailsScreen> {
                                     isFavorite: isFav,
                                     onFavoriteToggle: () {
                                       context
-                                          .read<FavoritesCubit>()
+                                          .read<FavoritesProvider>()
                                           .toggleFavorite(widget.drug);
                                       _showSnackBar(
                                         isFav
@@ -300,7 +300,7 @@ class _DrugDetailsScreenState extends State<DrugDetailsScreen> {
         ),
         IconButton(
           onPressed: () {
-            context.read<FavoritesCubit>().toggleFavorite(widget.drug);
+            context.read<FavoritesProvider>().toggleFavorite(widget.drug);
             _showSnackBar(
               isFavorite ? "تمت الإزالة من المفضلة" : "تمت الإضافة إلى المفضلة",
             );

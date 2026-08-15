@@ -7,7 +7,7 @@ import 'core/di/injection_container.dart' as di;
 import 'core/theme/themes.dart';
 import 'package:provider/provider.dart';
 import 'package:dua/features/drug_search/presentation/cubit/search_cubit.dart';
-import 'package:dua/features/favorites/presentation/cubit/favorites_cubit.dart';
+import 'package:dua/features/favorites/presentation/providers/favorites_provider.dart';
 import 'package:dua/features/access_control/presentation/providers/access_provider.dart';
 import 'features/splash/presentation/pages/splash_screen.dart';
 
@@ -27,11 +27,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => di.sl<AccessProvider>()),
+        ChangeNotifierProvider(create: (_) => di.sl<FavoritesProvider>()..init()),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => di.sl<SearchCubit>()),
-          BlocProvider(create: (_) => di.sl<FavoritesCubit>()..init()),
         ],
         child: MaterialApp(
         title: 'Dua',

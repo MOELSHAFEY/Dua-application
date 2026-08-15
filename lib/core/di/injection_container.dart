@@ -20,7 +20,7 @@ import 'package:dua/features/favorites/data/repositories/favorites_repository_im
 import 'package:dua/features/favorites/domain/repositories/favorites_repository.dart';
 import 'package:dua/features/favorites/domain/usecases/get_favorites_usecase.dart';
 import 'package:dua/features/favorites/domain/usecases/toggle_favorite_usecase.dart';
-import 'package:dua/features/favorites/presentation/cubit/favorites_cubit.dart';
+import 'package:dua/features/favorites/presentation/providers/favorites_provider.dart';
 import 'package:dua/core/network/api_client.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:dua/core/services/voice_search_service.dart';
@@ -49,7 +49,7 @@ Future<void> init() async {
   );
   // Features - Favorites
   sl.registerFactory(
-    () => FavoritesCubit(
+    () => FavoritesProvider(
       getFavoritesUseCase: sl(),
       toggleFavoriteUseCase: sl(),
       repository: sl(),

@@ -8,7 +8,7 @@ import 'package:dua/core/theme/colors.dart';
 import 'package:dua/core/widgets/empty_state_widget.dart';
 import 'package:dua/core/widgets/enhanced_drug_card.dart';
 import 'package:dua/core/widgets/shimmer_loading.dart';
-import 'package:dua/features/favorites/presentation/pages/favorites_screen.dart';
+import 'package:dua/features/favorites/presentation/screens/favorites_screen.dart';
 import 'package:dua/features/drug_search/presentation/cubit/search_cubit.dart';
 import 'package:dua/features/drug_search/presentation/cubit/search_state.dart';
 import 'package:dua/features/drug_details/presentation/pages/drug_details_screen.dart';
