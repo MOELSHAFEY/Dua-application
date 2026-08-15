@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/colors.dart';
+import '../../../settings/presentation/providers/settings_provider.dart';
 import '../../../access_control/presentation/screens/check_access_screen.dart';
+import '../../../drug_search/presentation/screens/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,13 +22,26 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    _timer = Timer(const Duration(seconds: 3), () {
-      if (mounted) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final settings = context.read<SettingsProvider>();
+      final isVerificationValid = settings.isAccessVerificationValid();
+
+      // Fast Launch (<200ms) if verified within the last 24h
+      final duration = isVerificationValid
+          ? const Duration(milliseconds: 150)
+          : const Duration(milliseconds: 2500);
+
+      _timer = Timer(duration, () {
+        if (!mounted) return;
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const CheckAccessScreen()),
+          MaterialPageRoute(
+            builder: (context) => isVerificationValid
+                ? const HomeScreen()
+                : const CheckAccessScreen(),
+          ),
         );
-      }
+      });
     });
   }
 

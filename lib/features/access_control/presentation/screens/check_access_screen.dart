@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../../../../core/di/injection_container.dart' as di;
+import '../../../settings/presentation/providers/settings_provider.dart';
 import '../../../drug_search/presentation/screens/home_screen.dart';
 import '../providers/access_provider.dart';
 
@@ -26,6 +27,7 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (provider.isAuthorized) {
+        context.read<SettingsProvider>().cacheAccessVerification();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const HomeScreen()),

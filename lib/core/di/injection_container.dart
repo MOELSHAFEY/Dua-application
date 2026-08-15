@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:dua/features/settings/data/datasources/settings_local_data_source.dart';
+import 'package:dua/features/settings/presentation/providers/settings_provider.dart';
 import 'package:dua/features/access_control/data/datasources/access_remote_data_source.dart';
 import 'package:dua/features/access_control/data/repositories/access_repository_impl.dart';
 import 'package:dua/features/access_control/domain/repositories/access_repository.dart';
@@ -29,6 +31,12 @@ import 'package:dua/core/services/voice_search_service.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  // Features - Settings & Accessibility
+  sl.registerLazySingleton(() => SettingsProvider(sl()));
+  sl.registerLazySingleton<SettingsLocalDataSource>(
+    () => SettingsLocalDataSourceImpl(),
+  );
+
   // Features - Drug Search
   sl.registerLazySingleton(() => SearchProvider(searchDrugsUseCase: sl()));
   sl.registerLazySingleton(() => SearchHistoryProvider());
