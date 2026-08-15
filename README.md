@@ -1,102 +1,132 @@
-# <p align="center">Dua - Smart Medication Assistant 💊</p>
+<div align="center">
 
-<p align="center">
-  <img src="assets/banner.png" alt="Dua Banner" width="100%">
-</p>
+  <img src="assets/icon.png" alt="Dua Logo" width="120" style="border-radius: 24px;" />
 
-<p align="center">
-  <a href="https://github.com/MOELSHAFEY/Dua-application">
-    <img src="https://img.shields.io/github/stars/MOELSHAFEY/Dua-application?style=for-the-badge&color=1E40AF" alt="Stars">
-  </a>
-  <a href="https://github.com/MOELSHAFEY/Dua-application/network/members">
-    <img src="https://img.shields.io/github/forks/MOELSHAFEY/Dua-application?style=for-the-badge&color=0D9488" alt="Forks">
-  </a>
-  <a href="https://github.com/MOELSHAFEY/Dua-application/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/MOELSHAFEY/Dua-application?style=for-the-badge&color=1E40AF" alt="License">
-  </a>
-  <img src="https://img.shields.io/badge/Flutter-^3.7.2-02569B?style=for-the-badge&logo=flutter" alt="Flutter Version">
-</p>
+  # **دوا — DUA**
+  ### **Smart Medical & Drug Information Assistant**
 
----
+  <p align="center">
+    <strong>دليلك الدوائي الشامل والذكي لمعرفة أسعار الأدوية، المواد الفعالة، والبدائل المتاحة</strong>
+  </p>
 
-## 📖 Introduction
+  <p align="center">
+    <a href="https://github.com/MOELSHAFEY/Dua-application/releases"><img src="https://img.shields.io/badge/Version-v6.0.0-0284C7?style=for-the-badge&logo=flutter&logoColor=white" alt="Version"></a>
+    <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-^3.7.2-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter"></a>
+    <a href="https://pub.dev/packages/provider"><img src="https://img.shields.io/badge/State-Provider%20Only-0D9488?style=for-the-badge" alt="Provider"></a>
+    <a href="https://github.com/MOELSHAFEY/Dua-application/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-1E293B?style=for-the-badge" alt="License"></a>
+  </p>
 
-**Dua** is a professional, elegantly designed Flutter application that empowers users to search for medications, check prices, and find alternative treatments with ease. Built with a focus on premium UI/UX (the **Medical Slate** design system), it provides a seamless and trusted experience for managing healthcare information.
+  <p align="center">
+    <a href="#-features">Key Features</a> •
+    <a href="#-architecture">Clean Architecture</a> •
+    <a href="#-design--theming">Design & Themes</a> •
+    <a href="#-getting-started">Getting Started</a> •
+    <a href="#-developer">Developer</a>
+  </p>
 
-<p align="center">
-  <img src="assets/icon.png" alt="Dua Logo" width="200">
-</p>
+  ---
 
-## 🚀 Table of Contents
-- [✨ Key Features](#-key-features)
-- [🎨 Design Philosophy](#-design-philosophy-medical-slate)
-- [🏗️ Architecture](#️-architecture-clean-architecture)
-- [🛠️ Technical Stack](#️-technical-stack)
-- [📦 Installation & Setup](#-installation--setup)
-- [🤝 Contributing](#-contributing)
-- [📞 Contact & Support](#-contact--support)
-- [📜 License](#-license)
+</div>
 
----
+<br />
 
-## ✨ Key Features
+## 🌟 Overview
 
-### 🔍 Smart Medication Search
-Quickly find medications by name or active ingredient. The search system uses a remote data source to ensure up-to-date information on availability and pricing.
+**DUA (دوا)** is a modern, human-crafted Flutter application engineered to provide patients, pharmacists, and medical professionals across Egypt with rapid, dependable, and offline-resilient access to pharmaceutical information, verified prices, active ingredients, and alternatives.
 
-### 💡 Alternative Discovery
-Stop wasting time searching for alternatives. Dua automatically suggests equivalent medications with the same active ingredients, helping users find cost-effective options.
-
-### ❤️ Smart Favorites
-Save your most important medications for quick viewing. Offline support is planned for future updates.
-
-### 🛡️ Secure Access Control
-Integrated security features including a sleek splash screen and access verification to ensure a professional and safe user experience.
-
-### 🌍 Professional Arabic Support
-Tailored specifically for Arabic-speaking users with professional **Cairo** typography and Right-to-Left (RTL) layout optimization.
-
-### 📸 Smart Sharing
-Share medication cards as high-quality images directly from the app, making it easy to consult with doctors or pharmacists.
+Built from the ground up using **Clean Architecture** and **Provider-only state management**, DUA delivers instantaneous searches, accessibility controls, offline persistence via Hive, and a sleek dual-mode medical palette.
 
 ---
 
-## 🎨 Design Philosophy: Medical Slate
+## ✨ Features
 
-Dua is built on the **Medical Slate** design language, characterized by a premium and calming aesthetic:
-
-- **Calming Palette**: Deep Indigo (`#1E40AF`) and Medical Teal (`#0D9488`) on a soft Slate background.
-- **Premium Components**: Custom-built cards, shimmers, and interactive elements.
-- **Micro-Animations**: Uses `animate_do` for subtle, professional transitions that enhance user trust and engagement.
-- **Typography**: Optimized readability with **Cairo** (Arabic) and **Inter** (Latin).
+<table>
+  <tr>
+    <td width="50%">
+      <h3>🔍 Instant Debounced Search</h3>
+      <p>Instantaneous results triggered automatically 300ms after typing stops, featuring dynamic search keyword highlighting in drug names.</p>
+    </td>
+    <td width="50%">
+      <h3>🌓 Complete Dual Theme</h3>
+      <p>Flawless transition between a crisp Slate Light theme and a deep OLED-friendly Dark theme (Slate-900 / Emerald-400).</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h3>♿ Accessibility & Font Scaling</h3>
+      <p>In-app font size controls (Normal 1.0x / Large 1.25x) specifically designed for elderly patients and comfortable reading.</p>
+    </td>
+    <td width="50%">
+      <h3>❤️ Quick Swipe-to-Favorite</h3>
+      <p>Swipe right on any drug card to instantly save or remove from local favorites with tactile haptic feedback.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h3>⚡ Smart Launch (< 150ms)</h3>
+      <p>Bypasses initial splash delays on warm starts if access verification was completed in the last 24 hours.</p>
+    </td>
+    <td width="50%">
+      <h3>🛡️ Offline Resilience Banner</h3>
+      <p>Gracefully alerts the user when offline with a one-tap shortcut to view offline-cached Favorites.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h3>🎙️ Voice Search Integration</h3>
+      <p>Speech-to-text recognition allowing effortless hands-free medication searches.</p>
+    </td>
+    <td width="50%">
+      <h3>📸 Smart Share Cards</h3>
+      <p>Export and share medication cards with full active ingredient details and pricing directly to WhatsApp or doctors.</p>
+    </td>
+  </tr>
+</table>
 
 ---
 
-## 🏗️ Architecture: Clean Architecture
+## 🏗️ Architecture
 
-The project follows strict **Clean Architecture** principles to ensure modularity, scalability, and maintainability.
+DUA strictly adheres to **Clean Architecture** with feature-driven modularity:
 
-### 📁 Directory Structure
-```text
+```
 lib/
-├── core/               # Shared logic, themes, and common widgets
-│   ├── di/             # Dependency injection (GetIt)
-│   ├── network/        # API clients and network logic
-│   ├── theme/          # Medical Slate theme definitions
-│   ├── widgets/        # Reusable premium UI components
-│   └── error/          # Failure and exception handling
-└── features/           # Modular business logic (Clean Architecture)
-    ├── access_control/ # Security and initialization
-    ├── drug_search/    # Search and results logic
-    ├── drug_details/   # Detailed info and alternatives
-    ├── favorites/      # Offline data management
-    └── app_info/       # Application information screen
+├── core/                       # Core abstractions, DI, themes, and shared widgets
+│   ├── di/                     # Dependency Injection with GetIt
+│   ├── entities/               # Core domain entities (Drug)
+│   ├── network/                # ApiClient & HTTP handlers
+│   ├── services/               # VoiceSearchService
+│   ├── theme/                  # AppColors & AppThemes (Dual Mode)
+│   └── widgets/                # EnhancedDrugCard, CustomLoader, EmptyStateWidget, Shimmer
+└── features/                   # Feature Modules (Clean Architecture)
+    ├── access_control/         # Security, remote version validation, and update handling
+    ├── app_info/               # Application information, developer details, and contacts
+    ├── drug_details/           # Drug details, zoomable images, dosage, and sharing
+    ├── drug_search/            # Debounced search, voice search, history chips, home
+    ├── favorites/              # Hive-backed offline favorites management
+    ├── settings/               # Dark/Light theme, font scaling, and access caching
+    └── splash/                 # Smart launch & branding
 ```
 
-### 🧱 Layer Decomposition
-- **Data Layer**: Repositories, data sources, and models (Hive/API).
-- **Domain Layer**: Pure business logic (Entities and Use Cases).
-- **Presentation Layer**: Provider (`ChangeNotifier`) for state management and Flutter UI.
+```mermaid
+graph TD
+    UI[Presentation Layer: Widgets & ChangeNotifier Providers] --> Domain[Domain Layer: Entities & Use Cases]
+    Data[Data Layer: Repositories & Data Sources] --> Domain
+    Data --> Remote[Remote API / Network]
+    Data --> Local[Local Storage: Hive Boxes]
+    DI[GetIt Service Locator] --> UI
+    DI --> Domain
+    DI --> Data
+```
+
+---
+
+## 🎨 Design & Theming
+
+Designed with human-crafted proportions, high-contrast Cairo typography, and subtle micro-elevations:
+
+- **Light Mode**: Crisp Slate-50 background (`#F8FAFC`), pure white surfaces (`#FFFFFF`), Slate-200 borders (`#E2E8F0`), and Emerald-600 price tags (`#059669`).
+- **Dark Mode**: Deep Slate-900 background (`#0F172A`), Slate-800 surfaces (`#1E293B`), Slate-700 borders (`#334155`), and luminous Emerald-400 price tags (`#34D399`).
 
 ---
 
@@ -104,69 +134,68 @@ lib/
 
 | Category | Technology |
 | :--- | :--- |
-| **Framework** | [Flutter](https://flutter.dev/) (^3.7.2) |
-| **State Management** | [Provider](https://pub.dev/packages/provider) |
-| **Local Database** | [Hive](https://pub.dev/packages/hive) |
-| **Dependency Injection** | [GetIt](https://pub.dev/packages/get_it) |
-| **Functional Error Handling** | [Dartz](https://pub.dev/packages/dartz) |
-| **UI Components** | [Animate Do](https://pub.dev/packages/animate_do), [Shimmer](https://pub.dev/packages/shimmer) |
-| **Utilities** | [Share Plus](https://pub.dev/packages/share_plus), [Url Launcher](https://pub.dev/packages/url_launcher) |
+| **Framework** | [Flutter](https://flutter.dev/) (v3.7.2+) |
+| **State Management** | [Provider](https://pub.dev/packages/provider) (^6.1.5) |
+| **Local Database** | [Hive Flutter](https://pub.dev/packages/hive_flutter) (^1.1.0) |
+| **Dependency Injection** | [GetIt](https://pub.dev/packages/get_it) (^9.2.1) |
+| **Functional Programming** | [Dartz](https://pub.dev/packages/dartz) (^0.10.1) |
+| **Voice Recognition** | [Speech to Text](https://pub.dev/packages/speech_to_text) (^7.0.0) |
+| **Sharing & Screenshots** | [Share Plus](https://pub.dev/packages/share_plus) & [Screenshot](https://pub.dev/packages/screenshot) |
+| **Typography** | [Google Fonts](https://pub.dev/packages/google_fonts) (Cairo) |
 
 ---
 
-## 📦 Installation & Setup
+## 🚀 Getting Started
 
-### 📋 Prerequisites
-- [Flutter SDK](https://docs.flutter.dev/get-started/install) (^3.7.2)
-- Android Studio / VS Code
-- An Android/iOS device or emulator
+### Prerequisites
+- Flutter SDK `^3.7.2` or higher
+- Dart SDK `^3.7.2` or higher
+- Android Studio / VS Code with Flutter extension
 
-### 🛠️ Step-by-Step Guide
+### Installation
+
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/MOELSHAFEY/Dua-application.git
-   ```
-2. **Navigate to the project directory:**
-   ```bash
    cd Dua-application
    ```
-3. **Install dependencies:**
+
+2. **Install dependencies:**
    ```bash
    flutter pub get
    ```
-4. **Run the application:**
+
+3. **Run Static Analysis & Tests:**
+   ```bash
+   flutter analyze
+   flutter test
+   ```
+
+4. **Run on Device or Emulator:**
    ```bash
    flutter run
    ```
 
----
-
-## 🤝 Contributing
-
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+5. **Build Release APK:**
+   ```bash
+   flutter build apk --release
+   ```
 
 ---
 
-## 📞 Contact & Support
+## 👨‍💻 Developer
 
-If you have any questions or need support, feel free to reach out:
-
-- **Developer**: [Moelshafey](https://github.com/MOELSHAFEY)
+**Mohamed Elshafey (MOELSHAFEY)**  
+- **GitHub**: [@MOELSHAFEY](https://github.com/MOELSHAFEY)
 - **Telegram**: [@MO_SH_FY](https://t.me/MO_SH_FY)
-- **Project Link**: [https://github.com/MOELSHAFEY/Dua-application](https://github.com/MOELSHAFEY/Dua-application)
+- **Repository**: [Dua-application](https://github.com/MOELSHAFEY/Dua-application)
 
 ---
 
-## 📜 License
+## 📄 License
 
-Distributed under the **MIT License**. See `LICENSE` for more information.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
-<p align="center">
-  <b>Created by <a href="https://github.com/MOELSHAFEY">Moelshafey</a> © 2026</b>
-</p>
+<div align="center">
+  <sub>Built with ❤️ for patients and healthcare professionals in Egypt • © 2026 MOELSHAFEY</sub>
+</div>

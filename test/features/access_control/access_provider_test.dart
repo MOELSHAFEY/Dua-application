@@ -35,7 +35,7 @@ void main() {
   });
 
   test('checkAccess sets authorized status when version matches current version', () async {
-    fakeRepository.result = const Right(AppVersion(version: '5.0.0', url: 'https://update.url'));
+    fakeRepository.result = const Right(AppVersion(version: '6.0.0', url: 'https://update.url'));
 
     await provider.checkAccess();
 
@@ -45,7 +45,7 @@ void main() {
   });
 
   test('checkAccess sets updateRequired when version does not match', () async {
-    fakeRepository.result = const Right(AppVersion(version: '5.1.0', url: 'https://update.url'));
+    fakeRepository.result = const Right(AppVersion(version: '6.1.0', url: 'https://update.url'));
 
     await provider.checkAccess();
 

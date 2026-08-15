@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
       scrolledUnderElevation: 1,
       centerTitle: true,
       title: Text(
-        'دوا',
+        'DUA',
         style: GoogleFonts.cairo(
           fontWeight: FontWeight.bold,
           color: AppColors.primary,
@@ -97,20 +97,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       actions: [
-        // Text Size Toggle Button
-        IconButton(
-          icon: Icon(
-            settings.isLargeText ? Icons.format_size_rounded : Icons.text_fields_rounded,
-            size: 22,
-          ),
-          tooltip: settings.isLargeText ? 'خط عادي' : 'خط كبير',
-          onPressed: () => settings.toggleTextSize(),
-        ),
-
         // Dark/Light Theme Toggle Button
         IconButton(
           icon: Icon(
-            settings.isDarkMode ? Icons.light_mode_rounded : Icons.dark_mode_outlined,
+            settings.isDarkMode
+                ? Icons.light_mode_rounded
+                : Icons.dark_mode_outlined,
             size: 22,
           ),
           tooltip: settings.isDarkMode ? 'الوضع الفاتح' : 'الوضع الليلي',
@@ -119,7 +111,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
         // Favorites Button
         IconButton(
-          icon: const Icon(Icons.favorite_border_rounded, color: AppColors.error),
+          icon: const Icon(
+            Icons.favorite_border_rounded,
+            color: AppColors.error,
+          ),
           tooltip: 'المفضلة',
           onPressed: () {
             HapticFeedback.lightImpact();
@@ -191,13 +186,17 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const FavoritesScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const FavoritesScreen(),
+                ),
               );
             },
           ),
           SwitchListTile(
             secondary: Icon(
-              settings.isDarkMode ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+              settings.isDarkMode
+                  ? Icons.dark_mode_rounded
+                  : Icons.light_mode_rounded,
               color: AppColors.primary,
             ),
             title: Text(
@@ -213,7 +212,10 @@ class _HomeScreenState extends State<HomeScreen> {
             onChanged: (_) => settings.toggleTheme(context),
           ),
           SwitchListTile(
-            secondary: const Icon(Icons.format_size_rounded, color: AppColors.primary),
+            secondary: const Icon(
+              Icons.format_size_rounded,
+              color: AppColors.primary,
+            ),
             title: Text(
               'تكبير حجم الخط',
               style: GoogleFonts.cairo(
@@ -245,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'الإصدار 5.0.0',
+                  'الإصدار 6.0.0',
                   style: GoogleFonts.cairo(
                     fontSize: 12,
                     color: AppColors.textLight,
@@ -306,11 +308,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (_isListening) ...[
                       const SizedBox(height: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.errorLight,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: AppColors.error.withValues(alpha: 0.2)),
+                          border: Border.all(
+                            color: AppColors.error.withValues(alpha: 0.2),
+                          ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -339,9 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              Expanded(
-                child: _buildResults(searchProvider),
-              ),
+              Expanded(child: _buildResults(searchProvider)),
             ],
           ),
         );
@@ -353,37 +358,37 @@ class _HomeScreenState extends State<HomeScreen> {
     final isFocused = _focusNode.hasFocus;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final primaryColor = Theme.of(context).colorScheme.primary;
-    final borderColor = isFocused
-        ? primaryColor
-        : (isDark ? AppColors.borderDark : AppColors.border);
-    final fieldBg = isFocused
-        ? Theme.of(context).cardColor
-        : (isDark ? AppColors.surfaceElevatedDark : AppColors.grey50);
+    final borderColor =
+        isFocused
+            ? primaryColor
+            : (isDark ? AppColors.borderDark : AppColors.border);
+    final fieldBg =
+        isFocused
+            ? Theme.of(context).cardColor
+            : (isDark ? AppColors.surfaceElevatedDark : AppColors.grey50);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
         color: fieldBg,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: borderColor,
-          width: isFocused ? 1.5 : 1.0,
-        ),
-        boxShadow: isFocused
-            ? [
-                BoxShadow(
-                  color: primaryColor.withValues(alpha: isDark ? 0.15 : 0.08),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ]
-            : [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: isDark ? 0.1 : 0.02),
-                  blurRadius: 4,
-                  offset: const Offset(0, 1),
-                ),
-              ],
+        border: Border.all(color: borderColor, width: isFocused ? 1.5 : 1.0),
+        boxShadow:
+            isFocused
+                ? [
+                  BoxShadow(
+                    color: primaryColor.withValues(alpha: isDark ? 0.15 : 0.08),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+                : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: isDark ? 0.1 : 0.02),
+                    blurRadius: 4,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
       ),
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       child: Row(
@@ -400,14 +405,20 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: isFocused
-                      ? primaryColor.withValues(alpha: 0.1)
-                      : Colors.transparent,
+                  color:
+                      isFocused
+                          ? primaryColor.withValues(alpha: 0.1)
+                          : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
                   Icons.search_rounded,
-                  color: isFocused ? primaryColor : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondary),
+                  color:
+                      isFocused
+                          ? primaryColor
+                          : (isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary),
                   size: 22,
                 ),
               ),
@@ -489,16 +500,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: _isListening
-                        ? AppColors.error
-                        : (_focusNode.hasFocus ? AppColors.primary.withValues(alpha: 0.08) : Colors.transparent),
+                    color:
+                        _isListening
+                            ? AppColors.error
+                            : (_focusNode.hasFocus
+                                ? AppColors.primary.withValues(alpha: 0.08)
+                                : Colors.transparent),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
                     _isListening ? Icons.mic_rounded : Icons.mic_none_rounded,
-                    color: _isListening
-                        ? Colors.white
-                        : (_focusNode.hasFocus ? AppColors.primary : AppColors.textSecondary),
+                    color:
+                        _isListening
+                            ? Colors.white
+                            : (_focusNode.hasFocus
+                                ? AppColors.primary
+                                : AppColors.textSecondary),
                     size: 20,
                   ),
                 ),
@@ -610,7 +627,11 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.wifi_off_rounded, color: AppColors.warning, size: 22),
+                  const Icon(
+                    Icons.wifi_off_rounded,
+                    color: AppColors.warning,
+                    size: 22,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     'تعذر الاتصال بالإنترنت',
@@ -639,15 +660,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     HapticFeedback.lightImpact();
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const FavoritesScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => const FavoritesScreen(),
+                      ),
                     );
                   },
-                  icon: const Icon(Icons.favorite_rounded, size: 16, color: Colors.white),
+                  icon: const Icon(
+                    Icons.favorite_rounded,
+                    size: 16,
+                    color: Colors.white,
+                  ),
                   label: const Text('تصفح المفضلة المحفوظة'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.warning,
                     foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 10),
                   ),
                 ),
@@ -678,7 +707,8 @@ class _HomeScreenState extends State<HomeScreen> {
           return const EmptyStateWidget(
             icon: Icons.search_rounded,
             title: 'ابحث عن أي دواء',
-            subtitle: 'اكتب اسم الدواء التجاري أو العلمي لمعرفة الأسعار والبدائل المتاحة',
+            subtitle:
+                'اكتب اسم الدواء التجاري أو العلمي لمعرفة الأسعار والبدائل المتاحة',
           );
         }
 
@@ -720,32 +750,33 @@ class _HomeScreenState extends State<HomeScreen> {
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: history.map((item) {
-                return InputChip(
-                  label: Text(item),
-                  labelStyle: GoogleFonts.cairo(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                  backgroundColor: Theme.of(context).cardColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: const BorderSide(color: AppColors.border),
-                  ),
-                  onDeleted: () {
-                    HapticFeedback.lightImpact();
-                    historyProvider.removeSearch(item);
-                  },
-                  deleteIconColor: AppColors.textLight,
-                  deleteIcon: const Icon(Icons.close_rounded, size: 14),
-                  onPressed: () {
-                    HapticFeedback.lightImpact();
-                    _searchController.text = item;
-                    _onPerformSearch(item);
-                  },
-                );
-              }).toList(),
+              children:
+                  history.map((item) {
+                    return InputChip(
+                      label: Text(item),
+                      labelStyle: GoogleFonts.cairo(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                      backgroundColor: Theme.of(context).cardColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: const BorderSide(color: AppColors.border),
+                      ),
+                      onDeleted: () {
+                        HapticFeedback.lightImpact();
+                        historyProvider.removeSearch(item);
+                      },
+                      deleteIconColor: AppColors.textLight,
+                      deleteIcon: const Icon(Icons.close_rounded, size: 14),
+                      onPressed: () {
+                        HapticFeedback.lightImpact();
+                        _searchController.text = item;
+                        _onPerformSearch(item);
+                      },
+                    );
+                  }).toList(),
             ),
           ],
         );
@@ -757,7 +788,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return const EmptyStateWidget(
       icon: Icons.search_off_rounded,
       title: 'لم يتم العثور على نتائج',
-      subtitle: 'تأكد من كتابة اسم الدواء بشكل صحيح، أو ابحث باسم المادة الفعالة',
+      subtitle:
+          'تأكد من كتابة اسم الدواء بشكل صحيح، أو ابحث باسم المادة الفعالة',
     );
   }
 }

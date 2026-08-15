@@ -58,6 +58,6 @@ void main() {
     expect(find.text('عن التطبيق'), findsOneWidget);
     expect(find.text('دوا - Dua'), findsOneWidget);
     expect(find.text('حول التطبيق'), findsOneWidget);
-    expect(find.text('الاصدار 5.0.0'), findsOneWidget);
+    expect(find.text('الاصدار 6.0.0'), findsOneWidget);
   });
 }

@@ -81,7 +81,7 @@ class AppInfoScreen extends StatelessWidget {
                   border: Border.all(color: badgeBorder),
                 ),
                 child: Text(
-                  'الاصدار 5.0.0',
+                  'الاصدار 6.0.0',
                   style: GoogleFonts.cairo(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,

@@ -12,7 +12,7 @@ enum AccessStatus {
 
 class AccessProvider extends ChangeNotifier {
   final CheckVersionUseCase checkVersionUseCase;
-  static const String currentVersion = "5.0.0";
+  static const String currentVersion = "6.0.0";
 
   AccessStatus _status = AccessStatus.initial;
   String _updateUrl = '';
