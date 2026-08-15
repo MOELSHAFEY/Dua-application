@@ -14,7 +14,7 @@ import 'package:dua/features/drug_details/data/datasources/drug_details_remote_d
 import 'package:dua/features/drug_details/data/repositories/drug_details_repository_impl.dart';
 import 'package:dua/features/drug_details/domain/repositories/drug_details_repository.dart';
 import 'package:dua/features/drug_details/domain/usecases/get_drug_info_usecase.dart';
-import 'package:dua/features/drug_details/presentation/cubit/drug_details_cubit.dart';
+import 'package:dua/features/drug_details/presentation/providers/drug_details_provider.dart';
 import 'package:dua/features/favorites/data/datasources/favorites_local_data_source.dart';
 import 'package:dua/features/favorites/data/repositories/favorites_repository_impl.dart';
 import 'package:dua/features/favorites/domain/repositories/favorites_repository.dart';
@@ -39,7 +39,7 @@ Future<void> init() async {
   );
 
   // Features - Drug Details
-  sl.registerFactory(() => DrugDetailsCubit(getDrugInfoUseCase: sl()));
+  sl.registerFactory(() => DrugDetailsProvider(getDrugInfoUseCase: sl()));
   sl.registerLazySingleton(() => GetDrugInfoUseCase(sl()));
   sl.registerLazySingleton<DrugDetailsRepository>(
     () => DrugDetailsRepositoryImpl(remoteDataSource: sl()),

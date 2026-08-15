@@ -11,7 +11,7 @@ import 'package:dua/core/widgets/shimmer_loading.dart';
 import 'package:dua/features/favorites/presentation/screens/favorites_screen.dart';
 import 'package:dua/features/drug_search/presentation/cubit/search_cubit.dart';
 import 'package:dua/features/drug_search/presentation/cubit/search_state.dart';
-import 'package:dua/features/drug_details/presentation/pages/drug_details_screen.dart';
+import 'package:dua/features/drug_details/presentation/screens/drug_details_screen.dart';
 import 'package:dua/core/services/voice_search_service.dart';
 import 'package:dua/core/di/injection_container.dart' as di;
 

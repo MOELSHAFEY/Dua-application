@@ -6,7 +6,7 @@ import 'package:dua/core/theme/colors.dart';
 import 'package:dua/core/widgets/custom_loading_indicator.dart';
 import 'package:dua/core/widgets/empty_state_widget.dart';
 import 'package:dua/core/widgets/enhanced_drug_card.dart';
-import 'package:dua/features/drug_details/presentation/pages/drug_details_screen.dart';
+import 'package:dua/features/drug_details/presentation/screens/drug_details_screen.dart';
 import '../providers/favorites_provider.dart';
 
 class FavoritesScreen extends StatelessWidget {

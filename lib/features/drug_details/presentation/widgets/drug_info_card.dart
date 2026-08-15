@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:dua/core/theme/colors.dart';
-import 'package:dua/features/drug_details/presentation/cubit/drug_details_state.dart';
+import '../providers/drug_details_provider.dart';
 import 'package:dua/core/widgets/shimmer_loading.dart';
 
 class DrugInfoCard extends StatelessWidget {
-  final DrugDetailsState state;
+  final DrugDetailsProvider provider;
   final bool isTablet;
 
   const DrugInfoCard({
     super.key,
-    required this.state,
+    required this.provider,
     required this.isTablet,
   });
 
   @override
   Widget build(BuildContext context) {
     String infoText = '';
-    if (state is DrugDetailsLoaded) {
-      infoText = (state as DrugDetailsLoaded).info
+    if (provider.isLoaded) {
+      infoText = provider.drugInfo
           .replaceAll(
             RegExp(
               r'<style[^>]*>.*?</style>',
@@ -48,8 +48,8 @@ class DrugInfoCard extends StatelessWidget {
           .replaceAll('&lt;', '<')
           .replaceAll('&gt;', '>')
           .trim();
-    } else if (state is DrugDetailsError) {
-      infoText = (state as DrugDetailsError).message;
+    } else if (provider.isError) {
+      infoText = provider.errorMessage;
     } else {
       infoText = 'جاري التحميل...';
     }
@@ -76,7 +76,7 @@ class DrugInfoCard extends StatelessWidget {
             _buildInfoCardHeader(),
             Padding(
               padding: const EdgeInsets.all(24),
-              child: state is DrugDetailsLoading
+              child: provider.isLoading
                   ? FadeIn(
                       duration: const Duration(milliseconds: 400),
                       child: const DrugDetailShimmer(),
