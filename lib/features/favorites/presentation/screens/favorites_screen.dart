@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:dua/core/theme/colors.dart';
-import 'package:dua/core/widgets/custom_loading_indicator.dart';
+import 'package:dua/core/widgets/custom_loader.dart';
 import 'package:dua/core/widgets/empty_state_widget.dart';
 import 'package:dua/core/widgets/enhanced_drug_card.dart';
 import 'package:dua/features/drug_details/presentation/screens/drug_details_screen.dart';
@@ -14,46 +14,49 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
-      appBar: AppBar(
-        title: Text(
-          'المفضلة',
-          style: GoogleFonts.cairo(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: AppColors.scaffoldBackground,
+        appBar: AppBar(
+          title: Text(
+            'الأدوية المفضلة',
+            style: GoogleFonts.cairo(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
           ),
+          centerTitle: true,
+          backgroundColor: AppColors.surface,
+          elevation: 0,
+          scrolledUnderElevation: 1,
         ),
-        centerTitle: true,
-        backgroundColor: AppColors.surface,
-        elevation: 0,
-      ),
-      body: Consumer<FavoritesProvider>(
-        builder: (context, provider, child) {
-          if (provider.isLoading) {
-            return const Center(child: CustomLoadingIndicator());
-          }
-
-          if (provider.isLoaded) {
-            final favorites = provider.favorites;
-
-            if (favorites.isEmpty) {
-              return EmptyStateWidget(
-                icon: Icons.favorite_border,
-                title: 'لا توجد أدوية في المفضلة',
-                subtitle: 'ابحث عن الأدوية وأضفها إلى المفضلة لتسهيل الوصول إليها لاحقاً',
-              );
+        body: Consumer<FavoritesProvider>(
+          builder: (context, provider, child) {
+            if (provider.isLoading) {
+              return const Center(child: CustomLoader(size: 32));
             }
 
-            return ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: favorites.length,
-              itemBuilder: (context, index) {
-                final drug = favorites[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: EnhancedDrugCard(
+            if (provider.isLoaded) {
+              final favorites = provider.favorites;
+
+              if (favorites.isEmpty) {
+                return const EmptyStateWidget(
+                  icon: Icons.favorite_border_rounded,
+                  title: 'قائمة المفضلة فارغة',
+                  subtitle: 'يمكنك حفظ الأدوية المهمة بالضغط على رمز القلب في شاشة تفاصيل الدواء',
+                );
+              }
+
+              return ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.all(16),
+                itemCount: favorites.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 8),
+                itemBuilder: (context, index) {
+                  final drug = favorites[index];
+                  return EnhancedDrugCard(
                     drug: drug,
                     index: index,
                     onTap: () {
@@ -64,18 +67,23 @@ class FavoritesScreen extends StatelessWidget {
                         ),
                       );
                     },
-                  ),
-                );
-              },
-            );
-          }
+                  );
+                },
+              );
+            }
 
-          if (provider.isError) {
-            return Center(child: Text(provider.errorMessage));
-          }
+            if (provider.isError) {
+              return Center(
+                child: Text(
+                  provider.errorMessage,
+                  style: GoogleFonts.cairo(color: AppColors.error),
+                ),
+              );
+            }
 
-          return const SizedBox.shrink();
-        },
+            return const SizedBox.shrink();
+          },
+        ),
       ),
     );
   }

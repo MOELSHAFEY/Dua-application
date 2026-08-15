@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:animate_do/animate_do.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/colors.dart';
@@ -48,98 +47,66 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
           _handleStatusChange(context, provider);
 
           return Scaffold(
-            body: Container(
-              width: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppColors.primaryDark,
-                  AppColors.primary,
-                ],
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-              ),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  top: -100,
-                  right: -100,
-                  child: Container(
-                    width: 300,
-                    height: 300,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                Center(
+            backgroundColor: AppColors.scaffoldBackground,
+            body: SafeArea(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      FadeInDown(
-                        duration: const Duration(milliseconds: 800),
-                        child: Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.15),
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
-                          ),
-                          child: const Icon(
-                            Icons.security_rounded,
-                            color: Colors.white,
-                            size: 60,
-                          ),
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.verified_user_outlined,
+                          color: AppColors.primary,
+                          size: 40,
                         ),
                       ),
-                      const SizedBox(height: 48),
-                      FadeInUp(
-                        duration: const Duration(milliseconds: 600),
-                        child: Text(
-                          'تحقق من الوصول الآمن',
-                          style: GoogleFonts.cairo(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                          ),
+                      const SizedBox(height: 24),
+                      Text(
+                        'التحقق من الاتصال',
+                        style: GoogleFonts.cairo(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      FadeInUp(
-                        duration: const Duration(milliseconds: 700),
-                        delay: const Duration(milliseconds: 200),
-                        child: Text(
-                          'جاري تأمين اتصالك بالخادم...',
-                          style: GoogleFonts.cairo(
-                            fontSize: 16,
-                            color: Colors.white.withValues(alpha: 0.8),
-                          ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'جاري الاتصال بالخادم والتحقق من التحديثات...',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.cairo(
+                          fontSize: 14,
+                          color: AppColors.textSecondary,
                         ),
                       ),
-                      const SizedBox(height: 48),
-                      const CustomLoader(size: 50, primaryColor: Colors.white),
+                      const SizedBox(height: 36),
+                      const CustomLoader(size: 32),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        );
-      },
-    ),
-  );
-}
+          );
+        },
+      ),
+    );
+  }
 
   void _showUpdateDialog(BuildContext ctx, String updateUrl) {
     showDialog(
       context: ctx,
       barrierDismissible: false,
       builder: (_) => _AppDialog(
-        icon: Icons.system_update_alt,
-        title: "تحديث مطلوب",
-        message: "للاستمرار، يرجى تحديث التطبيق إلى أحدث إصدار.",
+        icon: Icons.system_update_rounded,
+        title: "تحديث جديد متوفر",
+        message: "يتوفر إصدار أحدث من التطبيق. يرجى التحديث للمتابعة والاستفادة من أحدث الميزات.",
         buttonText: "تحديث الآن",
         onPressed: () async {
           final uri = Uri.parse(updateUrl);
@@ -156,9 +123,9 @@ class _CheckAccessScreenState extends State<CheckAccessScreen> {
       context: ctx,
       barrierDismissible: false,
       builder: (_) => _AppDialog(
-        icon: Icons.wifi_off,
-        title: "مشكلة اتصال",
-        message: message,
+        icon: Icons.cloud_off_rounded,
+        title: "تعذر الاتصال",
+        message: message.isNotEmpty ? message : "يرجى التحقق من اتصالك بالإنترنت والمحاولة مجدداً.",
         buttonText: "إعادة المحاولة",
         onPressed: () {
           Navigator.pop(ctx);
@@ -190,40 +157,53 @@ class _AppDialog extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         backgroundColor: AppColors.surface,
-        contentPadding: const EdgeInsets.all(24),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+        actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
+        title: Row(
           children: [
-            Center(child: Icon(icon, size: 48, color: AppColors.primary)),
-            const SizedBox(height: 16),
+            Icon(icon, size: 24, color: AppColors.primary),
+            const SizedBox(width: 10),
             Text(
               title,
-              textAlign: TextAlign.right,
               style: GoogleFonts.cairo(
-                fontSize: 18,
+                fontSize: 17,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              message,
-              textAlign: TextAlign.right,
-              style: GoogleFonts.cairo(fontSize: 14, color: AppColors.textSecondary),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: onPressed,
-                child: Text(buttonText),
-              ),
-            ),
           ],
         ),
+        content: Text(
+          message,
+          style: GoogleFonts.cairo(
+            fontSize: 14,
+            color: AppColors.textSecondary,
+            height: 1.5,
+          ),
+        ),
+        actions: [
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: onPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+              child: Text(
+                buttonText,
+                style: GoogleFonts.cairo(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -14,51 +14,53 @@ class DrugProductImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 250,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Hero(
-          tag: 'drug_img_${drug.id}',
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              drug.image.contains("http")
-                  ? Image.network(
-                    drug.image,
-                    fit: BoxFit.contain,
-                    errorBuilder:
-                        (context, error, stackTrace) =>
-                            _buildPlaceholderImage(),
-                  )
-                  : _buildPlaceholderImage(),
-              Positioned(
-                bottom: 16,
-                right: 16,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.8),
-                    shape: BoxShape.circle,
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 1),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            height: 220,
+            padding: const EdgeInsets.all(16),
+            child: Hero(
+              tag: 'drug_img_${drug.id}',
+              child: Stack(
+                children: [
+                  Center(
+                    child: drug.image.contains("http")
+                        ? Image.network(
+                            drug.image,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) => _buildPlaceholderImage(),
+                          )
+                        : _buildPlaceholderImage(),
                   ),
-                  child: const Icon(
-                    Icons.fullscreen_rounded,
-                    color: AppColors.primary,
-                    size: 30,
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColors.grey100,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(
+                        Icons.zoom_in_rounded,
+                        color: AppColors.textSecondary,
+                        size: 20,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -66,14 +68,11 @@ class DrugProductImage extends StatelessWidget {
   }
 
   Widget _buildPlaceholderImage() {
-    return Container(
-      color: AppColors.primary.withValues(alpha: 0.1),
-      child: Center(
-        child: Icon(
-          Icons.medication_rounded,
-          size: 100,
-          color: AppColors.primary.withValues(alpha: 0.3),
-        ),
+    return const Center(
+      child: Icon(
+        Icons.medication_outlined,
+        size: 72,
+        color: AppColors.textLight,
       ),
     );
   }
